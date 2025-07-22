@@ -146,11 +146,13 @@ export const deleteTodo = async (req, res) => {
   }
 };
 
+
+
 export const toggleTodo = async (req, res) => {
   try {
-    const todo = await Todo.findOne({ 
-      _id: req.params.id, 
-      userId: req.user.id 
+    const todo = await Todo.findOne({
+      _id: req.params.id,
+      userId: req.user.id
     });
 
     if (!todo) {
@@ -165,7 +167,7 @@ export const toggleTodo = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Todo status updated',
+      message: 'Todo status updated successfully',
       data: { todo }
     });
   } catch (error) {
@@ -175,4 +177,3 @@ export const toggleTodo = async (req, res) => {
     });
   }
 };
-

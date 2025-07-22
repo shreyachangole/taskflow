@@ -1,8 +1,8 @@
 import express from 'express';
 import {getTodos,getTodo,createTodo,updateTodo,deleteTodo,toggleTodo} from '../controllers/todoController.js';
-import {protect} from '../middleware/auth';
+import {protect} from '../middleware/auth.js';
 
-const router=express.Router();
+const router = express.Router();
 router.use(protect);
 
 router.route('/')
@@ -14,6 +14,6 @@ router.route('/:id')
    .put(updateTodo)
    .delete(deleteTodo);
 
-router.patch('/:id/toggle',toggleTodo);
+router.patch('/:id/toggle', toggleTodo);
 
 export default router;
