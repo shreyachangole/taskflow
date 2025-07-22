@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import authImage from "@/assets/auth.png";
+
 export function SignupForm({
   className,
   ...props
@@ -55,7 +55,7 @@ export function SignupForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src={authImage}
+              src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
           </div>

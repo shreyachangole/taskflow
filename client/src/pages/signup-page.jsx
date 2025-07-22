@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { SignupForm } from "@/components/signup-form";
+import { SignupForm } from "@/components/auth/signup-form";
 
 export function SignupPage() {
   return (

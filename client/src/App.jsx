@@ -8,6 +8,9 @@ function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
+    // Apply dark theme by default
+    document.documentElement.classList.add('dark');
+    
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
     };

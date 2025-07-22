@@ -29,10 +29,10 @@ export function Navbar({ isAuthenticated = false, user = null }) {
 
   const AuthButtons = () => (
     <div className="flex items-center gap-2">
-      <Button variant="ghost" onClick={() => navigate('/login')}>
+      <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-300 hover:text-white hover:bg-gray-800">
         Sign In
       </Button>
-      <Button onClick={() => navigate('/signup')}>
+      <Button onClick={() => navigate('/signup')} className="bg-blue-600 hover:bg-blue-700 text-white">
         Get Started
       </Button>
     </div>
@@ -76,13 +76,13 @@ export function Navbar({ isAuthenticated = false, user = null }) {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
       <div className="container flex h-14 items-center">
         {/* Logo */}
         <div className="mr-4 flex">
           <button onClick={() => navigate('/')} className="mr-6 flex items-center space-x-2 cursor-pointer">
-            <CheckSquare className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">TaskFlow</span>
+            <CheckSquare className="h-6 w-6 text-blue-400" />
+            <span className="hidden font-bold text-white sm:inline-block">TaskFlow</span>
           </button>
         </div>
 
@@ -113,8 +113,8 @@ export function Navbar({ isAuthenticated = false, user = null }) {
             </SheetTrigger>
             <SheetContent side="left" className="pr-0">
               <a onClick={() => navigate('/')} className="flex items-center space-x-2 cursor-pointer">
-                <CheckSquare className="h-6 w-6 text-primary" />
-                <span className="font-bold">TaskFlow</span>
+                <CheckSquare className="h-6 w-6 text-blue-400" />
+                <span className="font-bold text-white">TaskFlow</span>
               </a>
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                 <div className="flex flex-col space-y-3">
@@ -122,10 +122,10 @@ export function Navbar({ isAuthenticated = false, user = null }) {
                     <>
                       <NavLinks />
                       <div className="flex flex-col space-y-2 pt-4">
-                        <Button variant="ghost" onClick={() => navigate('/login')}>
+                        <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-300 hover:text-white hover:bg-gray-800">
                           Sign In
                         </Button>
-                        <Button onClick={() => navigate('/signup')}>
+                        <Button onClick={() => navigate('/signup')} className="bg-blue-600 hover:bg-blue-700 text-white">
                           Get Started
                         </Button>
                       </div>

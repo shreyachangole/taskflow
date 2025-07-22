@@ -1,112 +1,126 @@
-import { CheckSquare, Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { CheckSquare, Github, Linkedin, Mail, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
   return (
-    <footer className="border-t bg-muted/40">
-      <div className="container px-4 py-8 md:py-12">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+    <footer className="bg-black text-white">
+      <div className="container px-4 py-12 md:py-16">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-4">
-              <CheckSquare className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">TaskFlow</span>
+            <div className="flex items-center space-x-2 mb-6">
+              <CheckSquare className="h-8 w-8 text-blue-400" />
+              <span className="font-bold text-2xl">TaskFlow</span>
+              <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">Beta</span>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Organize your tasks, boost your productivity, and achieve your goals with TaskFlow.
+            <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
+              Empowering developers with a comprehensive platform for task management, 
+              productivity tracking, and collaborative planning. Join our community and 
+              enhance your workflow efficiency.
             </p>
-            <div className="flex space-x-2">
-              <Button variant="ghost" size="icon">
-                <Github className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
+            <div className="flex space-x-3">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white bg-transparent"
+              >
+                <Star className="h-4 w-4 mr-2" />
+                Star on GitHub
               </Button>
-              <Button variant="ghost" size="icon">
-                <Twitter className="h-4 w-4" />
-                <span className="sr-only">Twitter</span>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Linkedin className="h-4 w-4" />
-                <span className="sr-only">LinkedIn</span>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Mail className="h-4 w-4" />
-                <span className="sr-only">Email</span>
+              <Button 
+                size="sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Contribute
               </Button>
             </div>
           </div>
 
-          {/* Product Links */}
+          {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4">Product</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+            <h3 className="font-semibold mb-4 text-white">Quick Links</h3>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-400">🏠</span>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  Home
+                </a>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-400">💻</span>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  Dashboard
+                </a>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-400">💝</span>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  About
+                </a>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-400">⚡</span>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
                   Features
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  API
-                </a>
-              </li>
             </ul>
           </div>
 
-          {/* Company Links */}
+          {/* Connect */}
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Blog
+            <h3 className="font-semibold mb-4 text-white">Connect</h3>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-center space-x-3">
+                <Github className="h-4 w-4 text-gray-400" />
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  GitHub
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
+              <li className="flex items-center space-x-3">
+                <Linkedin className="h-4 w-4 text-gray-400" />
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  LinkedIn
+                </a>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Mail className="h-4 w-4 text-gray-400" />
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  Email
+                </a>
+              </li>
+              <li className="flex items-center space-x-3">
+                <span className="text-gray-400 font-mono text-sm">Be</span>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  Behance
                 </a>
               </li>
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="font-semibold mb-4">Stay Updated</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Subscribe to our newsletter for the latest updates and tips.
-            </p>
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Enter your email"
-                type="email"
-                className="flex-1"
-              />
-              <Button type="submit">Subscribe</Button>
-            </div>
           </div>
         </div>
 
-        <Separator className="my-8" />
-
         {/* Bottom Section */}
-        <div className="flex flex-col space-y-4 md:flex-row md:justify-between md:space-y-0">
-          <div className="flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0">
-            <p className="text-sm text-muted-foreground">
-              © 2025 TaskFlow. All rights reserved.
-            </p>
-          </div>
-          <div className="flex space-x-4 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Cookie Policy
-            </a>
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          <div className="flex flex-col space-y-4 md:flex-row md:justify-between md:items-center md:space-y-0">
+            <div className="flex items-center space-x-4 text-sm text-gray-400">
+              <span>© 2025 TaskFlow. All rights reserved.</span>
+              <a href="#" className="hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Terms
+              </a>
+            </div>
+            <div className="text-sm text-gray-400">
+              Crafted with <span className="text-red-500">❤️</span> by{" "}
+              <a 
+                href="#" 
+                className="text-orange-400 hover:text-orange-300 transition-colors font-medium"
+              >
+                Sagar Waghmare
+              </a>
+            </div>
           </div>
         </div>
       </div>

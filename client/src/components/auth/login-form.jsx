@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import authImage from "@/assets/auth.png";
-export function SignupForm({
+
+export function LoginForm({
   className,
   ...props
 }) {
@@ -21,34 +22,31 @@ export function SignupForm({
           <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
+                <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-muted-foreground text-balance">
-                  Join TaskFlow and start organizing your tasks
+                  Login to your Acme Inc account
                 </p>
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" type="text" placeholder="John Doe" required />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="m@example.com" required />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="Enter your password" required />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="Confirm your password" required />
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <a href="#" className="ml-auto text-sm underline-offset-2 hover:underline">
+                    Forgot your password?
+                  </a>
+                </div>
+                <Input id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
-                Create Account
+                Login
               </Button>
               <div className="text-center text-sm">
-                Already have an account?{" "}
-                <button onClick={() => navigate('/login')} className="underline underline-offset-4 cursor-pointer">
-                  Sign in
+                Don&apos;t have an account?{" "}
+                <button onClick={() => navigate('/signup')} className="underline underline-offset-4 cursor-pointer">
+                  Sign up
                 </button>
               </div>
             </div>
