@@ -21,8 +21,8 @@ export function SignupForm({
           <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
-                <p className="text-muted-foreground text-balance">
+                <h1 className="text-2xl font-bold text-white">Create your account</h1>
+                <p className="text-gray-400 text-balance">
                   Join TaskFlow and start organizing your tasks
                 </p>
               </div>
@@ -42,12 +42,12 @@ export function SignupForm({
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <Input id="confirmPassword" type="password" placeholder="Confirm your password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                 Create Account
               </Button>
               <div className="text-center text-sm">
                 Already have an account?{" "}
-                <button onClick={() => navigate('/login')} className="underline underline-offset-4 cursor-pointer">
+                <button onClick={() => navigate('/login')} className="underline underline-offset-4 cursor-pointer text-blue-400 hover:text-blue-300">
                   Sign in
                 </button>
               </div>

@@ -49,11 +49,11 @@ export function HeroSection() {
             <span>Active Users</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-foreground">1M+</span>
+            <span className="font-semibold text-white">1M+</span>
             <span>Tasks Completed</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-foreground">99.9%</span>
+            <span className="font-semibold text-white">99.9%</span>
             <span>Uptime</span>
           </div>
         </div>
@@ -61,12 +61,12 @@ export function HeroSection() {
 
       {/* Hero Image */}
       <div className="relative mx-auto max-w-5xl">
-        <div className="relative rounded-xl border bg-background shadow-2xl">
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="relative rounded-xl border border-gray-800 bg-gray-900 shadow-2xl">
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20" />
           <img
             src="/api/placeholder/1200/600"
             alt="TaskFlow Dashboard Preview"
-            className="relative rounded-xl"
+            className="relative rounded-xl opacity-90"
           />
         </div>
       </div>

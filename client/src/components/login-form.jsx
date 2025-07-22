@@ -21,9 +21,9 @@ export function LoginForm({
           <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">
-                  Login to your Acme Inc account
+                <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+                <p className="text-gray-400 text-balance">
+                  Login to your TaskFlow account
                 </p>
               </div>
               <div className="grid gap-3">
@@ -39,12 +39,12 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                 Login
               </Button>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <button onClick={() => navigate('/signup')} className="underline underline-offset-4 cursor-pointer">
+                <button onClick={() => navigate('/signup')} className="underline underline-offset-4 cursor-pointer text-blue-400 hover:text-blue-300">
                   Sign up
                 </button>
               </div>
