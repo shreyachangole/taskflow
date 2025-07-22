@@ -15,54 +15,78 @@ export function LoginForm({
   };
 
   return (
-    (<div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-                <p className="text-gray-400 text-balance">
-                  Login to your TaskFlow account
-                </p>
+    <div className={cn("flex flex-col gap-6 w-full max-w-sm mx-auto", className)} {...props}>
+      <Card className="border-gray-800 bg-gray-900/90 backdrop-blur-sm shadow-2xl">
+        <CardContent className="p-8">
+          <form className="space-y-6">
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-2 shadow-lg">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+              <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+              <p className="text-gray-400 text-sm">
+                Sign in to your TaskFlow account
+              </p>
+            </div>
+            
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-gray-300 text-sm font-medium">Email address</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  required 
+                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 h-11 rounded-lg transition-all duration-200"
+                />
               </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a href="#" className="ml-auto text-sm underline-offset-2 hover:underline">
-                    Forgot your password?
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-gray-300 text-sm font-medium">Password</Label>
+                  <a href="#" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">
+                    Forgot password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
-              </div>
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                Login
-              </Button>
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <button onClick={() => navigate('/signup')} className="underline underline-offset-4 cursor-pointer text-blue-400 hover:text-blue-300">
-                  Sign up
-                </button>
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="Enter your password"
+                  required 
+                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 h-11 rounded-lg transition-all duration-200"
+                />
               </div>
             </div>
+            
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 h-11 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+              Sign In
+            </Button>
+            
+            <div className="text-center pt-2">
+              <span className="text-gray-400 text-sm">Don't have an account? </span>
+              <button 
+                type="button"
+                onClick={() => navigate('/signup')} 
+                className="text-blue-400 hover:text-blue-300 font-medium text-sm transition-colors"
+              >
+                Sign up
+              </button>
+            </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
-          </div>
         </CardContent>
       </Card>
-      <div
-        className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+      
+      <div className="text-center text-xs text-gray-500 leading-relaxed">
+        By signing in, you agree to our{" "}
+        <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
+          Privacy Policy
+        </a>
       </div>
-    </div>)
+    </div>
   );
 }
