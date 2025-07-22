@@ -1,16 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { LandingPage } from './pages/landing-page';
+import { LoginPage } from './pages/login-page';
+import { SignupPage } from './pages/signup-page';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
-  return (
-    <>
-     <h1>TaskFlow</h1>
-    </>
-  )
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Simple routing logic
+  const renderPage = () => {
+    switch (currentPath) {
+      case '/login':
+        return <LoginPage />;
+      case '/signup':
+        return <SignupPage />;
+      default:
+        return <LandingPage />;
+    }
+  };
+
+  return renderPage();
 }
 
-export default App
+export default App;
