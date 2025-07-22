@@ -10,10 +10,10 @@ export function HeroSection() {
   };
 
   return (
-    <section className="container relative">
+    <section className="container relative bg-black">
       <div className="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
         {/* Badge */}
-        <Badge variant="outline" className="mb-4 bg-blue-950 border-blue-700 text-blue-300">
+        <Badge variant="outline" className="mb-4 bg-blue-600 border-blue-600 text-white">
           <Star className="mr-1 h-3 w-3" />
           New: AI-powered task suggestions
         </Badge>

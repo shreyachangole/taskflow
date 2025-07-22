@@ -6,10 +6,10 @@ import { CTASection } from "@/components/landing/cta-section";
 
 export function LandingPage() {
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col bg-black">
       <Navbar isAuthenticated={false} />
       
-      <main className="flex-1">
+      <main className="flex-1 bg-black">
         <HeroSection />
         <FeaturesSection />
         <CTASection />
