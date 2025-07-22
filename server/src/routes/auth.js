@@ -1,6 +1,6 @@
 import express from 'express';
 import {register,login,getProfile,logout} from "../controllers/authControllers.js";
-const {protect} =require('../middleware/auth.js')
+import {protect} from '../middleware/auth.js'
 
 const router=express.Router();
 router.post('/register',register);

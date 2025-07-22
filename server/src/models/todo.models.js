@@ -11,7 +11,7 @@ const todoSchema=new mongoose.Schema(
     description:{
         type:String,
         required:[true,'Description is required for the todo'],
-        minlength:[100,'Description must be greater than 100 characters'],
+        minlength:[10,'Description must be greater than 10 characters'],
         maxlength:[500,'Description cannot exceed 500 characters'],
         default:''
     },
@@ -72,4 +72,5 @@ todoSchema.virtual('isOverdue').get(function(){
 
 todoSchema.set('toJSON',{virtuals:true});
 
-export default Todo=mongoose.model("todoSchema",Todo);
+const Todo = mongoose.model("Todo", todoSchema);
+export default Todo;

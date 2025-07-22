@@ -1,7 +1,7 @@
-import {jwt} from "jsonwebtoken";
-import User from "../models/user.models";
+import jwt from "jsonwebtoken";
+import User from "../models/user.models.js";
 
-const protect=async(req,res,next)=>{
+export const protect=async(req,res,next)=>{
     try{
         let token;
         // Check for token in Authorization header
@@ -14,7 +14,7 @@ const protect=async(req,res,next)=>{
                 message:'Access denied. No token Provided.'
             })
         }
-        const decoded=jwt.verify(token,process.JWT_SECRET);
+        const decoded=jwt.verify(token,process.env.JWT_SECRET);
         const user=await User.findById(decoded.userId);
         if(!user){
             return res.status(401).json({
