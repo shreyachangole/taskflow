@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, CheckSquare, User, Settings, LogOut } from "lucide-react";
@@ -11,9 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-export default function Navbar({ isAuthenticated = false, user = null }) {
+import axios from "axios";
+import { set } from "zod";
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
+
 
   // Simple navigation function
   const navigate = (path) => {
@@ -21,11 +24,8 @@ export default function Navbar({ isAuthenticated = false, user = null }) {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
-  const NavLinks = () => (
-    <>
-      {/* Navigation links removed as requested */}
-    </>
-  );
+
+
 
   const AuthButtons = () => (
     <div className="flex items-center gap-2">
@@ -75,9 +75,27 @@ export default function Navbar({ isAuthenticated = false, user = null }) {
     </DropdownMenu>
   );
 
-  // Check for token in localStorage
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
   const loggedIn = !!token;
+  const [user, setUser] = useState(null);
+  const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
+  useEffect(() => {
+    if (token) {
+      axios.get('/api/auth/profile', axiosConfig)
+        .then(res => setUser(res.data.data.user))
+        .catch(err => console.error('Error fetching profile:', err));
+    }
+  }, []);
+  const isLoggedIn = !!token;
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/login');
+  };
+  // Profile picture initials
+  const profileInitials=user?user.name.split(" ").map(name=> name.charAt(0).toUpperCase()).join(" ") : "S";
+
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800">
@@ -127,11 +145,34 @@ export default function Navbar({ isAuthenticated = false, user = null }) {
           ) : null}
 
           {/* Right side */}
+          {/* Profile make it the initial into the profile picture */}
           <div className="flex items-center space-x-3">
             {loggedIn ? (
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm font-medium">
-                JD
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="w-8 h-8 cursor-pointer bg-blue-500 rounded-full flex items-center justify-center text-sm font-medium transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-2 focus:ring-blue-400"
+                    style={{ zIndex: 60 }}
+                    aria-label="Open profile menu"
+                  >
+                    {profileInitials}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-gray-800 text-white" align="end" forceMount style={{ zIndex: 60 }}>
+                  <DropdownMenuLabel className="font-normal ">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user?.name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-500 hover:bg-red-500 hover:text-white font-semibold">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-300 hover:text-white hover:bg-gray-800">

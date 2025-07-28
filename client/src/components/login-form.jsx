@@ -47,8 +47,9 @@ export function LoginForm({
       if (response.data.success) {
         setSuccess("Login successful! Redirecting...");
         // Store token in localStorage
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
+        const token = response.data.data?.token || response.data.token;
+        if (token) {
+          localStorage.setItem('token', token);
         }
         // Navigate to dashboard after 2 seconds
         setTimeout(() => {
