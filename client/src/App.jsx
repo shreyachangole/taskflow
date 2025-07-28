@@ -1,37 +1,25 @@
-import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { LandingPage } from './pages/landing-page';
 import { LoginPage } from './pages/login-page';
 import { SignupPage } from './pages/signup-page';
 import './App.css';
+import { useEffect } from 'react';
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-
+  // Apply dark theme by default
   useEffect(() => {
-    // Apply dark theme by default
     document.documentElement.classList.add('dark');
-    
-    const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Simple routing logic
-  const renderPage = () => {
-    switch (currentPath) {
-      case '/login':
-        return <LoginPage />;
-      case '/signup':
-        return <SignupPage />;
-      default:
-        return <LandingPage />;
-    }
-  };
-
-  return renderPage();
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

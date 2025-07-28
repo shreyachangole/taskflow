@@ -56,47 +56,54 @@ export const register=async(req,res)=>{
 // Login user
 export const login=async(req,res)=>{
     try {
-        const{email,password}=req.body;
-        const user=await User.findOne({email}).select('+password');
-        if(!user){
+        const { email, password } = req.body;
+        console.log('Login attempt:', { email, password });
+        const user = await User.findOne({ email }).select('+password');
+        console.log('User found:', user);
+        if (!user) {
+            console.log('No user found for email:', email);
             return res.status(401).json({
-                success:false,
-                message:"Invalid credentials",
+                success: false,
+                message: "Invalid credentials",
             });
         }
         // Checking the password of user is correct or not
-        const isPasswordValid=await user.comparePassword(password);
-        if(!isPasswordValid){
+        const isPasswordValid = await user.comparePassword(password);
+        console.log('Password valid:', isPasswordValid);
+        if (!isPasswordValid) {
+            console.log('Password invalid for user:', email);
             return res.status(401).json({
-                success:false,
-                message:"Invalid credentials",
-            })
+                success: false,
+                message: "Invalid credentials",
+            });
         }
         // Generating token
-        const token=generateToken(user._id);
-        if(!token){
+        const token = generateToken(user._id);
+        if (!token) {
+            console.log('Token generation failed for user:', email);
             return res.status(500).json({
-                success:false,
-                message:"Error generating token"
-            }); 
+                success: false,
+                message: "Error generating token"
+            });
         }
         res.status(200).json({
-            success:true,
-            message:'Login Successfully',
-            data:{
-                user:{
-                    id:user._id,
-                    name:user.name,
-                    email:user.email
+            success: true,
+            message: 'Login Successfully',
+            data: {
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email
                 },
                 token
             }
         });
     } catch (error) {
-       res.status(400).json({
-        success:false,
-        message:error.message
-       }) 
+        console.log('Login error:', error);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
     }
 
 
