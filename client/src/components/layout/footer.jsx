@@ -1,7 +1,7 @@
 import { CheckSquare, Github, Linkedin, Mail, Star, Zap, ExternalLink, Home, Monitor, Heart, Bolt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function Footer() {
+export default function Footer() {
   return (
     <footer className="bg-black text-white">
       <div className="container px-4 py-12 md:py-16">

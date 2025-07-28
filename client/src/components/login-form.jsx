@@ -46,6 +46,10 @@ export function LoginForm({
 
       if (response.data.success) {
         setSuccess("Login successful! Redirecting...");
+        // Store token in localStorage
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
         // Navigate to dashboard after 2 seconds
         setTimeout(() => {
           window.location.href = '/dashboard';

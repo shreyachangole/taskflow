@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Navbar({ isAuthenticated = false, user = null }) {
+export default function Navbar({ isAuthenticated = false, user = null }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Simple navigation function
@@ -75,85 +75,76 @@ export function Navbar({ isAuthenticated = false, user = null }) {
     </DropdownMenu>
   );
 
+  // Check for token in localStorage
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const loggedIn = !!token;
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
-      <div className="container flex h-14 items-center">
-        {/* Logo */}
-        <div className="mr-4 flex">
-          <button onClick={() => navigate('/')} className="mr-6 flex items-center space-x-2 cursor-pointer">
-            <CheckSquare className="h-6 w-6 text-blue-400" />
-            <span className="hidden font-bold text-white sm:inline-block">TaskFlow</span>
-          </button>
-        </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Left side */}
+          <div className="flex items-center">
+            <button
+              onClick={() => navigate('/')}
+              className="lg:hidden p-2 rounded-md hover:bg-gray-700 mr-2"
+              aria-label="Toggle sidebar"
+            >
+              <Menu size={20} />
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center focus:outline-none"
+              aria-label="Go to home"
+            >
+              <CheckSquare className="text-blue-500 mr-2" size={24} />
+              <span className="text-xl font-bold cursor-pointer">TaskFlow</span>
+            </button>
+          </div>
 
-        {/* Desktop Navigation */}
-        <div className="mr-4 hidden md:flex">
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            {!isAuthenticated && <NavLinks />}
-          </nav>
-        </div>
-
-        {/* Right side */}
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          {/* Desktop Auth/User Menu */}
-          <nav className="hidden md:flex">
-            {isAuthenticated ? <UserMenu /> : <AuthButtons />}
-          </nav>
-
-          {/* Mobile Menu */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          {/* Center/Right */}
+          {loggedIn ? (
+            <div className="hidden md:flex items-center space-x-6">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
               >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="pr-0">
-              <a onClick={() => navigate('/')} className="flex items-center space-x-2 cursor-pointer">
-                <CheckSquare className="h-6 w-6 text-blue-400" />
-                <span className="font-bold text-white">TaskFlow</span>
-              </a>
-              <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-                <div className="flex flex-col space-y-3">
-                  {!isAuthenticated && (
-                    <>
-                      <NavLinks />
-                      <div className="flex flex-col space-y-2 pt-4">
-                        <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-300 hover:text-white hover:bg-gray-800">
-                          Sign In
-                        </Button>
-                        <Button onClick={() => navigate('/signup')} className="bg-blue-600 hover:bg-blue-700 text-white">
-                          Get Started
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                  {isAuthenticated && (
-                    <div className="flex flex-col space-y-3">
-                      <a href="/dashboard" className="text-sm font-medium">
-                        Dashboard
-                      </a>
-                      <a href="/profile" className="text-sm font-medium">
-                        Profile
-                      </a>
-                      <a href="/settings" className="text-sm font-medium">
-                        Settings
-                      </a>
-                      <Button variant="ghost" className="justify-start px-0">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Log out
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                Dashboard
+              </button>
+              <button
+                onClick={() => navigate('/tasks')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+              >
+                My Tasks
+              </button>
+              <button
+                onClick={() => navigate('/categories')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
+              >
+                Categories
+              </button>
+            </div>
+          ) : null}
+
+          {/* Right side */}
+          <div className="flex items-center space-x-3">
+            {loggedIn ? (
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm font-medium">
+                JD
               </div>
-            </SheetContent>
-          </Sheet>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" onClick={() => navigate('/login')} className="text-gray-300 hover:text-white hover:bg-gray-800">
+                  Sign In
+                </Button>
+                <Button onClick={() => navigate('/signup')} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Get Started
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 }
