@@ -446,8 +446,8 @@ const Dashboard = () => {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
                     <div className="flex items-center">
                       <div className="p-3 rounded-full bg-blue-500 bg-opacity-20">
                         <CheckSquare className="text-blue-500" size={24} />
@@ -459,7 +459,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
                     <div className="flex items-center">
                       <div className="p-3 rounded-full bg-green-500 bg-opacity-20">
                         <CheckCircle className="text-green-500" size={24} />
@@ -471,7 +471,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
                     <div className="flex items-center">
                       <div className="p-3 rounded-full bg-red-500 bg-opacity-20">
                         <AlertCircle className="text-red-500" size={24} />
@@ -483,7 +483,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
                     <div className="flex items-center">
                       <div className="p-3 rounded-full bg-purple-500 bg-opacity-20">
                         <Archive className="text-purple-500" size={24} />
@@ -680,23 +680,26 @@ const Dashboard = () => {
                   filteredTasks.length === 0 ? (
                     <div className="text-center text-gray-400 py-8">No tasks found.</div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                       {['todo', 'in-progress', 'done'].map(status => {
                         const statusTasks = filteredTasks.filter(task => task.status === status);
                         return (
-                          <div key={status} className="bg-gray-900 rounded-lg border border-gray-800 p-4">
+                          <div
+                            key={status}
+                            className="bg-gray-900 rounded-lg border border-gray-800 p-3 sm:p-4 md:p-6 flex flex-col min-h-[300px]"
+                          >
                             <h3 className="font-semibold mb-4 capitalize">
                               {status === 'in-progress' ? 'In Progress' : status.charAt(0).toUpperCase() + status.slice(1)}
                               <span className="ml-2 text-sm text-gray-400">
                                 ({statusTasks.length})
                               </span>
                             </h3>
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex-1">
                               {statusTasks.length === 0 ? (
                                 <div className="text-gray-500 text-sm">No tasks</div>
                               ) : (
                                 statusTasks.map(task => (
-                                  <div key={task.id} className="bg-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                                  <div key={task.id} className="bg-gray-800 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer">
                                     <div className="flex items-start justify-between mb-2">
                                       <h4 className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>{task.title}</h4>
                                       <div className="flex space-x-1">
@@ -717,7 +720,7 @@ const Dashboard = () => {
                                     {task.description && (
                                       <p className="text-sm text-gray-400 mb-3">{task.description}</p>
                                     )}
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between flex-wrap gap-2">
                                       <div className="flex items-center space-x-2">
                                         {task.category && (
                                           <span className={`px-2 py-1 rounded text-xs font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'} text-white`}>
@@ -778,7 +781,7 @@ const Dashboard = () => {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {categories.map(category => (
                     <div key={category.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6">
                       <div className="flex items-center justify-between mb-4">
@@ -825,9 +828,9 @@ const Dashboard = () => {
 
       {/* Task Modal */}
       {showTaskModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-gray-900 rounded-lg w-full max-w-sm sm:max-w-md md:max-w-lg">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-800">
               <h2 className="text-xl font-semibold">
                 {editingTask ? 'Edit Task' : 'Add New Task'}
               </h2>
@@ -839,7 +842,7 @@ const Dashboard = () => {
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Title *</label>
                 <input
@@ -900,7 +903,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex space-x-3 p-6 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 p-4 sm:p-6 border-t border-gray-800">
               <button
                 onClick={editingTask ? updateTask : addTask}
                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -920,9 +923,9 @@ const Dashboard = () => {
 
       {/* Category Modal */}
       {showCategoryModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-gray-900 rounded-lg w-full max-w-sm sm:max-w-md md:max-w-lg">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-800">
               <h2 className="text-xl font-semibold">
                 {editingCategory ? 'Edit Category' : 'Add New Category'}
               </h2>
@@ -934,7 +937,7 @@ const Dashboard = () => {
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Name *</label>
                 <input
@@ -964,7 +967,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex space-x-3 p-6 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 p-4 sm:p-6 border-t border-gray-800">
               <button
                 onClick={editingCategory ? updateCategory : addCategory}
                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -986,7 +989,7 @@ const Dashboard = () => {
       {currentView === 'tasks' && (
         <button
           onClick={() => openTaskModal()}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors flex items-center justify-center z-40"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors flex items-center justify-center z-40"
           aria-label="Add new task"
         >
           <Plus size={24} />
@@ -1017,9 +1020,9 @@ const Dashboard = () => {
 
       {/* Task Details Modal */}
       {showTaskDetailsModal && selectedTask && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-gray-900 rounded-lg w-full max-w-sm sm:max-w-md md:max-w-lg">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-800">
               <h2 className="text-xl font-semibold">Task Details</h2>
               <button
                 onClick={() => setShowTaskDetailsModal(false)}
@@ -1028,7 +1031,7 @@ const Dashboard = () => {
                 <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <div>
                 <span className="block text-xs text-gray-400 mb-1">Title</span>
                 <div className="text-lg font-bold mb-2">{selectedTask.title}</div>
@@ -1068,7 +1071,7 @@ const Dashboard = () => {
                 <div className="text-gray-300">{selectedTask.createdAt ? selectedTask.createdAt.split('T')[0] : '—'}</div>
               </div>
             </div>
-            <div className="flex space-x-3 p-6 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 p-4 sm:p-6 border-t border-gray-800">
               <button
                 onClick={() => setShowTaskDetailsModal(false)}
                 className="flex-1 px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"

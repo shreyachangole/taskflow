@@ -105,13 +105,6 @@ export default function Navbar() {
           <div className="flex items-center">
             <button
               onClick={() => navigate('/')}
-              className="lg:hidden p-2 rounded-md hover:bg-gray-700 mr-2"
-              aria-label="Toggle sidebar"
-            >
-              <Menu size={20} />
-            </button>
-            <button
-              onClick={() => navigate('/')}
               className="flex items-center focus:outline-none"
               aria-label="Go to home"
             >
