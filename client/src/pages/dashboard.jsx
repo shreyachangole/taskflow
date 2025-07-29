@@ -104,25 +104,30 @@ const Dashboard = () => {
       showNotification('Please enter a task title', 'error');
       return;
     }
-    
+    if (!taskForm.description || taskForm.description.trim().length < 10) {
+      showNotification('Description must be at least 10 characters', 'error');
+      return;
+    }
+    // Only send fields expected by backend
     const newTask = {
-      id: Date.now(),
-      ...taskForm,
-      status: 'todo',
-      completed: false,
-      archived: false
+      title: taskForm.title.trim(),
+      description: taskForm.description.trim(),
+      dueDate: taskForm.dueDate || undefined,
+      priority: taskForm.priority || 'medium',
+      category: taskForm.category || 'general',
+      // completed, status, archived are handled by backend defaults
     };
-    // Add the new task my api
-    axios.post('/api/tasks', newTask, axiosConfig)
+    axios.post('/api/todos', newTask, axiosConfig)
       .then(res => {
-        setTasks(prev => [...prev, res.data]);
+        setTasks(prev => [...prev, res.data.data.todo]);
         setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
         setShowTaskModal(false);
         showNotification('Task added successfully!');
       })
       .catch(err => {
+        const msg = err?.response?.data?.message || 'Error adding task';
         console.error('Error adding task:', err);
-        showNotification('Error adding task', 'error');
+        showNotification(msg, 'error');
       });
   };
 
