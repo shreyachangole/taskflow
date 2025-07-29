@@ -147,7 +147,7 @@ export default function Navbar() {
           {/* Right side */}
           {/* Profile make it the initial into the profile picture */}
           <div className="flex items-center space-x-3">
-            {loggedIn ? (
+            {loggedIn && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button

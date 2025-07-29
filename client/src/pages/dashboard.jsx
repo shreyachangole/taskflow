@@ -22,9 +22,23 @@ import {
   Moon,
   Sun
 } from 'lucide-react';
-
+import axios from 'axios';
 const Dashboard = () => {
+  // Get the profile information
+  const [user,setUser]=useState(null);
+  const getUser=localStorage.getItem('token');
+  useEffect(()=>{
+    if (getUser) {
+      axios.get('/api/auth/profile', { headers: { Authorization: `Bearer ${getUser}` } })
+        .then(res => setUser(res.data.data.user))
+        .catch(err => console.error('Error fetching profile:', err));
+    }
+  }, []);
+  // Everything for the token and axiosconfig for every api
+  const token=localStorage.getItem('token');
+  const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
   // State management
+
   const [tasks, setTasks] = useState([
     { id: 1, title: 'Design homepage mockup', description: 'Create wireframes and mockups for the new homepage', dueDate: '2025-07-30', priority: 'high', category: 'Design', status: 'todo', completed: false, archived: false },
     { id: 2, title: 'Implement user authentication', description: 'Set up login and registration system', dueDate: '2025-07-29', priority: 'high', category: 'Development', status: 'in-progress', completed: false, archived: false },
@@ -98,11 +112,18 @@ const Dashboard = () => {
       completed: false,
       archived: false
     };
-    
-    setTasks(prev => [...prev, newTask]);
-    setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
-    setShowTaskModal(false);
-    showNotification('Task added successfully!');
+    // Add the new task my api
+    axios.post('/api/tasks', newTask, axiosConfig)
+      .then(res => {
+        setTasks(prev => [...prev, res.data]);
+        setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
+        setShowTaskModal(false);
+        showNotification('Task added successfully!');
+      })
+      .catch(err => {
+        console.error('Error adding task:', err);
+        showNotification('Error adding task', 'error');
+      });
   };
 
   const updateTask = () => {
