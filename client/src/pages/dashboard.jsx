@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  CheckSquare, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Archive, 
-  Calendar, 
-  Tag, 
-  Filter, 
-  Grid, 
-  List, 
-  Menu, 
-  X, 
-  User, 
-  Bell, 
+import {
+  CheckSquare,
+  Plus,
+  Edit,
+  Trash2,
+  Archive,
+  Calendar,
+  Tag,
+  Filter,
+  Grid,
+  List,
+  Menu,
+  X,
+  User,
+  Bell,
   Settings,
   BarChart3,
   Clock,
@@ -25,27 +25,56 @@ import {
 import axios from 'axios';
 const Dashboard = () => {
   // Get the profile information
-  const [user,setUser]=useState(null);
-  const getUser=localStorage.getItem('token');
-  useEffect(()=>{
+  const [user, setUser] = useState(null);
+  const getUser = localStorage.getItem('token');
+  useEffect(() => {
     if (getUser) {
       axios.get('/api/auth/profile', { headers: { Authorization: `Bearer ${getUser}` } })
         .then(res => setUser(res.data.data.user))
         .catch(err => console.error('Error fetching profile:', err));
     }
   }, []);
+  const userId=user?._id;
   // Everything for the token and axiosconfig for every api
-  const token=localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
   // State management
 
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Design homepage mockup', description: 'Create wireframes and mockups for the new homepage', dueDate: '2025-07-30', priority: 'high', category: 'Design', status: 'todo', completed: false, archived: false },
-    { id: 2, title: 'Implement user authentication', description: 'Set up login and registration system', dueDate: '2025-07-29', priority: 'high', category: 'Development', status: 'in-progress', completed: false, archived: false },
-    { id: 3, title: 'Write blog post', description: 'Article about React best practices', dueDate: '2025-08-01', priority: 'medium', category: 'Content', status: 'todo', completed: false, archived: false },
-    { id: 4, title: 'Team meeting preparation', description: 'Prepare slides for weekly team sync', dueDate: '2025-07-28', priority: 'low', category: 'Management', status: 'done', completed: true, archived: false }
-  ]);
-  
+  // Loading state for tasks
+  const [loadingTasks, setLoadingTasks] = useState(false);
+  // Get all the tasks from backend
+  useEffect(() => {
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+  if (!userId) return; // Wait until userId is available
+
+  setLoadingTasks(true);
+  axios.get('/api/todos', {
+    ...axiosConfig,
+    params: { userId }
+  })
+    .then(res => {
+      let todos = [];
+      if (res.data && res.data.data && Array.isArray(res.data.data.todos)) {
+        todos = res.data.data.todos.map(todo => ({
+          ...todo,
+          id: todo._id || todo.id
+        }));
+      }
+      setTasks(todos);
+    })
+    .catch(err => {
+      console.log('Error fetching tasks', err);
+      const msg = err?.response?.data?.message || 'Error fetching tasks';
+      showNotification(msg, 'error');
+    })
+    .finally(() => setLoadingTasks(false));
+}, [token, userId]);
+
+  const [tasks, setTasks] = useState([]);
+
   const [categories, setCategories] = useState([
     { id: 1, name: 'Design', color: 'bg-purple-500', count: 1 },
     { id: 2, name: 'Development', color: 'bg-blue-500', count: 1 },
@@ -132,7 +161,7 @@ const Dashboard = () => {
   };
 
   const updateTask = () => {
-    setTasks(prev => prev.map(task => 
+    setTasks(prev => prev.map(task =>
       task.id === editingTask.id ? { ...task, ...taskForm } : task
     ));
     setEditingTask(null);
@@ -142,8 +171,8 @@ const Dashboard = () => {
   };
 
   const toggleTaskComplete = (taskId) => {
-    setTasks(prev => prev.map(task => 
-      task.id === taskId 
+    setTasks(prev => prev.map(task =>
+      task.id === taskId
         ? { ...task, completed: !task.completed, status: !task.completed ? 'done' : 'todo' }
         : task
     ));
@@ -157,7 +186,7 @@ const Dashboard = () => {
   };
 
   const archiveTask = (taskId) => {
-    setTasks(prev => prev.map(task => 
+    setTasks(prev => prev.map(task =>
       task.id === taskId ? { ...task, archived: true } : task
     ));
     showNotification('Task archived successfully!');
@@ -169,13 +198,13 @@ const Dashboard = () => {
       showNotification('Please enter a category name', 'error');
       return;
     }
-    
+
     const newCategory = {
       id: Date.now(),
       ...categoryForm,
       count: 0
     };
-    
+
     setCategories(prev => [...prev, newCategory]);
     setCategoryForm({ name: '', color: 'bg-blue-500' });
     setShowCategoryModal(false);
@@ -183,7 +212,7 @@ const Dashboard = () => {
   };
 
   const updateCategory = () => {
-    setCategories(prev => prev.map(cat => 
+    setCategories(prev => prev.map(cat =>
       cat.id === editingCategory.id ? { ...cat, ...categoryForm } : cat
     ));
     setEditingCategory(null);
@@ -196,7 +225,7 @@ const Dashboard = () => {
     const category = categories.find(c => c.id === categoryId);
     setCategories(prev => prev.filter(cat => cat.id !== categoryId));
     // Remove category from tasks
-    setTasks(prev => prev.map(task => 
+    setTasks(prev => prev.map(task =>
       task.category === category.name ? { ...task, category: '' } : task
     ));
     showNotification('Category deleted successfully!');
@@ -205,7 +234,7 @@ const Dashboard = () => {
   // Filter tasks
   const getFilteredTasks = () => {
     let filtered = tasks;
-    
+
     switch (filterBy) {
       case 'today':
         const today = new Date().toISOString().split('T')[0];
@@ -225,7 +254,7 @@ const Dashboard = () => {
       default:
         filtered = tasks.filter(task => !task.archived);
     }
-    
+
     return filtered;
   };
 
@@ -233,7 +262,7 @@ const Dashboard = () => {
   const getStats = () => {
     const activeTasks = tasks.filter(task => !task.archived);
     const today = new Date().toISOString().split('T')[0];
-    
+
     return {
       total: activeTasks.length,
       completed: activeTasks.filter(task => task.completed).length,
@@ -286,7 +315,7 @@ const Dashboard = () => {
   };
 
   return (
-            <div className="min-h-screen bg-black text-white transition-colors duration-200">
+    <div className="min-h-screen bg-black text-white transition-colors duration-200">
       {/* Navigation Bar */}
 
       <div className="pt-16 flex">
@@ -301,41 +330,36 @@ const Dashboard = () => {
               <div className="space-y-2">
                 <button
                   onClick={() => { setFilterBy('all'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'all' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${filterBy === 'all' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                    }`}
                 >
                   All Tasks
                 </button>
                 <button
                   onClick={() => { setFilterBy('today'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'today' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${filterBy === 'today' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                    }`}
                 >
                   Today
                 </button>
                 <button
                   onClick={() => { setFilterBy('upcoming'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'upcoming' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${filterBy === 'upcoming' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                    }`}
                 >
                   Upcoming
                 </button>
                 <button
                   onClick={() => { setFilterBy('completed'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'completed' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${filterBy === 'completed' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                    }`}
                 >
                   Completed
                 </button>
                 <button
                   onClick={() => { setFilterBy('archived'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'archived' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${filterBy === 'archived' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                    }`}
                 >
                   Archived
                 </button>
@@ -373,7 +397,7 @@ const Dashboard = () => {
 
         {/* Overlay for mobile */}
         {sidebarOpen && (
-          <div 
+          <div
             className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           ></div>
@@ -452,17 +476,16 @@ const Dashboard = () => {
                       View All
                     </button>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {tasks.filter(task => !task.archived).slice(0, 5).map(task => (
                       <div key={task.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-800 transition-colors">
                         <button
                           onClick={() => toggleTaskComplete(task.id)}
-                          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                            task.completed 
-                              ? 'bg-green-500 border-green-500' 
+                          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${task.completed
+                              ? 'bg-green-500 border-green-500'
                               : 'border-gray-400 hover:border-green-400'
-                          }`}
+                            }`}
                         >
                           {task.completed && <CheckCircle size={12} className="text-white" />}
                         </button>
@@ -472,9 +495,8 @@ const Dashboard = () => {
                           </p>
                           <div className="flex items-center space-x-4 mt-1">
                             {task.category && (
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                              } text-white`}>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
+                                } text-white`}>
                                 {task.category}
                               </span>
                             )}
@@ -484,7 +506,7 @@ const Dashboard = () => {
                                 {task.dueDate}
                               </span>
                             )}
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
                               {task.priority}
                             </span>
                           </div>
@@ -510,27 +532,25 @@ const Dashboard = () => {
                     </h1>
                     <p className="text-gray-400">{filteredTasks.length} tasks</p>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
                     <div className="flex rounded-lg overflow-hidden border border-gray-600">
                       <button
                         onClick={() => setViewMode('list')}
-                        className={`px-3 py-2 text-sm font-medium transition-colors ${
-                          viewMode === 'list' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
-                        }`}
+                        className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+                          }`}
                       >
                         <List size={16} />
                       </button>
                       <button
                         onClick={() => setViewMode('kanban')}
-                        className={`px-3 py-2 text-sm font-medium transition-colors ${
-                          viewMode === 'kanban' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
-                        }`}
+                        className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === 'kanban' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
+                          }`}
                       >
                         <Grid size={16} />
                       </button>
                     </div>
-                    
+
                     <button
                       onClick={() => openTaskModal()}
                       className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center"
@@ -544,74 +564,75 @@ const Dashboard = () => {
                 {/* List View */}
                 {viewMode === 'list' && (
                   <div className="space-y-4">
-                    {filteredTasks.map(task => (
-                  <div key={task.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6 hover:shadow-lg transition-shadow">
-                        <div className="flex items-start space-x-4">
-                          <button
-                            onClick={() => toggleTaskComplete(task.id)}
-                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors mt-1 ${
-                              task.completed 
-                                ? 'bg-green-500 border-green-500' 
-                                : 'border-gray-400 hover:border-green-400'
-                            }`}
-                          >
-                            {task.completed && <CheckCircle size={14} className="text-white" />}
-                          </button>
-                          
-                          <div className="flex-1">
-                            <h3 className={`text-lg font-semibold mb-2 ${task.completed ? 'line-through text-gray-500' : ''}`}>
-                              {task.title}
-                            </h3>
-                            {task.description && (
-                              <p className="text-gray-400 mb-3">{task.description}</p>
-                            )}
-                            
-                            <div className="flex items-center space-x-4">
-                              {task.category && (
-                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                  categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                                } text-white`}>
-                                  {task.category}
-                                </span>
+                    {loadingTasks ? (
+                      <div className="text-center text-gray-400 py-8">Loading tasks...</div>
+                    ) : filteredTasks.length === 0 ? (
+                      <div className="text-center text-gray-400 py-8">No tasks found.</div>
+                    ) : (
+                      filteredTasks.map(task => (
+                        <div key={task.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6 hover:shadow-lg transition-shadow">
+                          <div className="flex items-start space-x-4">
+                            <button
+                              onClick={() => toggleTaskComplete(task.id)}
+                              className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors mt-1 ${task.completed
+                                  ? 'bg-green-500 border-green-500'
+                                  : 'border-gray-400 hover:border-green-400'
+                                }`}
+                            >
+                              {task.completed && <CheckCircle size={14} className="text-white" />}
+                            </button>
+                            <div className="flex-1">
+                              <h3 className={`text-lg font-semibold mb-2 ${task.completed ? 'line-through text-gray-500' : ''}`}>
+                                {task.title}
+                              </h3>
+                              {task.description && (
+                                <p className="text-gray-400 mb-3">{task.description}</p>
                               )}
-                              {task.dueDate && (
-                                <span className="text-sm text-gray-400 flex items-center">
-                                  <Calendar size={14} className="mr-1" />
-                                  {task.dueDate}
+                              <div className="flex items-center space-x-4">
+                                {task.category && (
+                                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
+                                    } text-white`}>
+                                    {task.category}
+                                  </span>
+                                )}
+                                {task.dueDate && (
+                                  <span className="text-sm text-gray-400 flex items-center">
+                                    <Calendar size={14} className="mr-1" />
+                                    {task.dueDate}
+                                  </span>
+                                )}
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium border ${priorityColors[task.priority]}`}>
+                                  {task.priority}
                                 </span>
-                              )}
-                              <span className={`px-3 py-1 rounded-full text-sm font-medium border ${priorityColors[task.priority]}`}>
-                                {task.priority}
-                              </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => openTaskModal(task)}
+                                className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
+                                aria-label="Edit task"
+                              >
+                                <Edit size={16} />
+                              </button>
+                              <button
+                                onClick={() => archiveTask(task.id)}
+                                className="p-2 text-gray-400 hover:text-yellow-400 hover:bg-gray-800 rounded-lg transition-colors"
+                                aria-label="Archive task"
+                              >
+                                <Archive size={16} />
+                              </button>
+                              <button
+                                onClick={() => deleteTask(task.id)}
+                                className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                                aria-label="Delete task"
+                              >
+                                <Trash2 size={16} />
+                              </button>
                             </div>
                           </div>
-                          
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => openTaskModal(task)}
-                              className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
-                              aria-label="Edit task"
-                            >
-                              <Edit size={16} />
-                            </button>
-                            <button
-                              onClick={() => archiveTask(task.id)}
-                              className="p-2 text-gray-400 hover:text-yellow-400 hover:bg-gray-800 rounded-lg transition-colors"
-                              aria-label="Archive task"
-                            >
-                              <Archive size={16} />
-                            </button>
-                            <button
-                              onClick={() => deleteTask(task.id)}
-                              className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
-                              aria-label="Delete task"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 )}
 
@@ -619,14 +640,14 @@ const Dashboard = () => {
                 {viewMode === 'kanban' && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {['todo', 'in-progress', 'done'].map(status => (
-                  <div key={status} className="bg-gray-900 rounded-lg border border-gray-800 p-4">
+                      <div key={status} className="bg-gray-900 rounded-lg border border-gray-800 p-4">
                         <h3 className="font-semibold mb-4 capitalize">
                           {status === 'in-progress' ? 'In Progress' : status}
                           <span className="ml-2 text-sm text-gray-400">
                             ({filteredTasks.filter(task => task.status === status).length})
                           </span>
                         </h3>
-                        
+
                         <div className="space-y-3">
                           {filteredTasks.filter(task => task.status === status).map(task => (
                             <div key={task.id} className="bg-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
@@ -649,17 +670,16 @@ const Dashboard = () => {
                                   </button>
                                 </div>
                               </div>
-                              
+
                               {task.description && (
                                 <p className="text-sm text-gray-400 mb-3">{task.description}</p>
                               )}
-                              
+
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                   {task.category && (
-                                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                      categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                                    } text-white`}>
+                                    <span className={`px-2 py-1 rounded text-xs font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
+                                      } text-white`}>
                                       {task.category}
                                     </span>
                                   )}
@@ -667,7 +687,7 @@ const Dashboard = () => {
                                     {task.priority}
                                   </span>
                                 </div>
-                                
+
                                 {task.dueDate && (
                                   <span className="text-xs text-gray-400 flex items-center">
                                     <Calendar size={12} className="mr-1" />
@@ -675,15 +695,14 @@ const Dashboard = () => {
                                   </span>
                                 )}
                               </div>
-                              
+
                               <div className="mt-3 flex items-center">
                                 <button
                                   onClick={() => toggleTaskComplete(task.id)}
-                                  className={`flex items-center text-sm font-medium transition-colors ${
-                                    task.completed 
-                                      ? 'text-green-400 hover:text-green-300' 
+                                  className={`flex items-center text-sm font-medium transition-colors ${task.completed
+                                      ? 'text-green-400 hover:text-green-300'
                                       : 'text-gray-400 hover:text-green-400'
-                                  }`}
+                                    }`}
                                 >
                                   <CheckCircle size={16} className="mr-1" />
                                   {task.completed ? 'Completed' : 'Mark Complete'}
@@ -707,7 +726,7 @@ const Dashboard = () => {
                     <h1 className="text-3xl font-bold mb-2">Categories</h1>
                     <p className="text-gray-400">Manage your task categories</p>
                   </div>
-                  
+
                   <button
                     onClick={() => openCategoryModal()}
                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center"
@@ -719,31 +738,31 @@ const Dashboard = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {categories.map(category => (
-                  <div key={category.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6">
+                    <div key={category.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center">
                           <div className={`w-4 h-4 rounded-full ${category.color} mr-3`}></div>
                           <h3 className="text-lg font-semibold">{category.name}</h3>
                         </div>
-                        
+
                         <div className="flex space-x-2">
-                        <button
-                          onClick={() => openCategoryModal(category)}
-                          className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
-                          aria-label="Edit category"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button
-                          onClick={() => deleteCategory(category.id)}
-                          className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
-                          aria-label="Delete category"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                          <button
+                            onClick={() => openCategoryModal(category)}
+                            className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
+                            aria-label="Edit category"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button
+                            onClick={() => deleteCategory(category.id)}
+                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                            aria-label="Delete category"
+                          >
+                            <Trash2 size={16} />
+                          </button>
                         </div>
                       </div>
-                      
+
                       <div className="text-center">
                         <p className="text-3xl font-bold text-blue-400 mb-1">{category.count}</p>
                         <p className="text-sm text-gray-400">
@@ -777,7 +796,7 @@ const Dashboard = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Title *</label>
@@ -789,7 +808,7 @@ const Dashboard = () => {
                   placeholder="Enter task title"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
@@ -800,7 +819,7 @@ const Dashboard = () => {
                   placeholder="Enter task description"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Due Date</label>
                 <input
@@ -810,7 +829,7 @@ const Dashboard = () => {
                   className="w-full px-3 py-2 border rounded-lg bg-gray-800 border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Priority</label>
                 <select
@@ -823,7 +842,7 @@ const Dashboard = () => {
                   <option value="high">High</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Category</label>
                 <select
@@ -838,7 +857,7 @@ const Dashboard = () => {
                 </select>
               </div>
             </div>
-            
+
             <div className="flex space-x-3 p-6 border-t border-gray-800">
               <button
                 onClick={editingTask ? updateTask : addTask}
@@ -872,7 +891,7 @@ const Dashboard = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Name *</label>
@@ -880,15 +899,14 @@ const Dashboard = () => {
                   type="text"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-white' 
+                  className={`w-full px-3 py-2 border rounded-lg ${isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                   placeholder="Enter category name"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Color</label>
                 <div className="grid grid-cols-4 gap-3">
@@ -896,15 +914,14 @@ const Dashboard = () => {
                     <button
                       key={color}
                       onClick={() => setCategoryForm({ ...categoryForm, color })}
-                      className={`w-12 h-12 rounded-lg ${color} border-2 transition-all ${
-                        categoryForm.color === color ? 'border-white scale-110' : 'border-gray-800'
-                      }`}
+                      className={`w-12 h-12 rounded-lg ${color} border-2 transition-all ${categoryForm.color === color ? 'border-white scale-110' : 'border-gray-800'
+                        }`}
                     />
                   ))}
                 </div>
               </div>
             </div>
-            
+
             <div className="flex space-x-3 p-6 border-t border-gray-800">
               <button
                 onClick={editingCategory ? updateCategory : addCategory}
@@ -939,11 +956,10 @@ const Dashboard = () => {
         {notifications.map(notification => (
           <div
             key={notification.id}
-            className={`px-4 py-3 rounded-lg shadow-lg max-w-sm transition-all transform ${
-              notification.type === 'success' 
-                ? 'bg-green-500 text-white' 
+            className={`px-4 py-3 rounded-lg shadow-lg max-w-sm transition-all transform ${notification.type === 'success'
+                ? 'bg-green-500 text-white'
                 : 'bg-red-500 text-white'
-            }`}
+              }`}
           >
             <div className="flex items-center">
               {notification.type === 'success' ? (

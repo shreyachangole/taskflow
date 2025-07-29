@@ -3,8 +3,8 @@ import Todo from "../models/todo.models.js";
 
 export const getTodos = async (req, res) => {
     try {
-        const { page = 1, limit = 10, completed, priority, category, search } = req.body;
-        // This is filter object
+        // Read filters from req.query for GET requests
+        const { page = 1, limit = 10, completed, priority, category, search } = req.query;
         const filter = { userId: req.user.id, isArchived: false };
         if (completed !== undefined) {
             filter.completed = completed == 'true';
@@ -24,7 +24,7 @@ export const getTodos = async (req, res) => {
         const todos = await Todo.find(filter)
             .sort({ createdAt: -1 })
             .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .skip((page - 1) * limit);
 
         const total = await Todo.countDocuments(filter);
         res.status(200).json({
@@ -37,7 +37,7 @@ export const getTodos = async (req, res) => {
                     total
                 }
             }
-        })
+        });
     } catch (error) {
         res.status(400).json({
             success: false,
