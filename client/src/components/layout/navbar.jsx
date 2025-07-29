@@ -120,32 +120,9 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Center/Right */}
-          {loggedIn ? (
-            <div className="hidden md:flex items-center space-x-6">
-              <button
-                onClick={() => navigate('/dashboard')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
-              >
-                Dashboard
-              </button>
-              <button
-                onClick={() => navigate('/tasks')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
-              >
-                My Tasks
-              </button>
-              <button
-                onClick={() => navigate('/categories')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors`}
-              >
-                Categories
-              </button>
-            </div>
-          ) : null}
+          {/* Center/Right - removed nav links */}
 
-          {/* Right side */}
-          {/* Profile make it the initial into the profile picture */}
+          {/* Right side - only profile icon and dropdown */}
           <div className="flex items-center space-x-3">
             {loggedIn && user ? (
               <DropdownMenu>
@@ -166,6 +143,11 @@ export default function Navbar() {
                       <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                     </div>
                   </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard')} className="hover:bg-blue-500 hover:text-white font-semibold">
+                    <CheckSquare className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-500 hover:bg-red-500 hover:text-white font-semibold">
                     <LogOut className="mr-2 h-4 w-4" />

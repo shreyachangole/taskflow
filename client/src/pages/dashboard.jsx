@@ -86,6 +86,9 @@ const Dashboard = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'kanban'
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  // State for Task Details Modal
+  const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -161,28 +164,49 @@ const Dashboard = () => {
   };
 
   const updateTask = () => {
-    setTasks(prev => prev.map(task =>
-      task.id === editingTask.id ? { ...task, ...taskForm } : task
-    ));
-    setEditingTask(null);
-    setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
-    setShowTaskModal(false);
-    showNotification('Task updated successfully!');
+    if (!editingTask) return;
+    axios.put(`/api/todos/${editingTask.id}`, taskForm, axiosConfig)
+      .then(res => {
+        const updatedTask = res.data.data.todo;
+        setTasks(prev => prev.map(task =>
+          task.id === updatedTask._id || task.id === updatedTask.id ? { ...task, ...updatedTask, id: updatedTask._id || updatedTask.id } : task
+        ));
+        setEditingTask(null);
+        setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
+        setShowTaskModal(false);
+        showNotification('Task updated successfully!');
+      })
+      .catch(err => {
+        const msg = err?.response?.data?.message || 'Error updating task';
+        showNotification(msg, 'error');
+      });
   };
 
   const toggleTaskComplete = (taskId) => {
-    setTasks(prev => prev.map(task =>
-      task.id === taskId
-        ? { ...task, completed: !task.completed, status: !task.completed ? 'done' : 'todo' }
-        : task
-    ));
-    const task = tasks.find(t => t.id === taskId);
-    showNotification(`Task ${task.completed ? 'marked as incomplete' : 'completed'}!`);
+    axios.patch(`/api/todos/${taskId}/toggle`, {}, axiosConfig)
+      .then(res => {
+        const updatedTask = res.data.data.todo;
+        setTasks(prev => prev.map(task =>
+          task.id === updatedTask._id || task.id === updatedTask.id ? { ...task, ...updatedTask, id: updatedTask._id || updatedTask.id } : task
+        ));
+        showNotification(`Task ${updatedTask.completed ? 'completed' : 'marked as incomplete'}!`);
+      })
+      .catch(err => {
+        const msg = err?.response?.data?.message || 'Error toggling task';
+        showNotification(msg, 'error');
+      });
   };
 
   const deleteTask = (taskId) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId));
-    showNotification('Task deleted successfully!');
+    axios.delete(`/api/todos/${taskId}`, axiosConfig)
+      .then(() => {
+        setTasks(prev => prev.filter(task => task.id !== taskId));
+        showNotification('Task deleted successfully!');
+      })
+      .catch(err => {
+        const msg = err?.response?.data?.message || 'Error deleting task';
+        showNotification(msg, 'error');
+      });
   };
 
   const archiveTask = (taskId) => {
@@ -235,24 +259,21 @@ const Dashboard = () => {
   const getFilteredTasks = () => {
     let filtered = tasks;
 
-    switch (filterBy) {
-      case 'today':
-        const today = new Date().toISOString().split('T')[0];
-        filtered = tasks.filter(task => task.dueDate === today && !task.archived);
-        break;
-      case 'upcoming':
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        filtered = tasks.filter(task => new Date(task.dueDate) >= tomorrow && !task.archived);
-        break;
-      case 'completed':
-        filtered = tasks.filter(task => task.completed && !task.archived);
-        break;
-      case 'archived':
-        filtered = tasks.filter(task => task.archived);
-        break;
-      default:
-        filtered = tasks.filter(task => !task.archived);
+    if (filterBy === 'today') {
+      const today = new Date().toISOString().split('T')[0];
+      filtered = tasks.filter(task => task.dueDate === today && !task.archived);
+    } else if (filterBy === 'upcoming') {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      filtered = tasks.filter(task => new Date(task.dueDate) >= tomorrow && !task.archived);
+    } else if (filterBy === 'completed') {
+      filtered = tasks.filter(task => task.completed && !task.archived);
+    } else if (filterBy === 'archived') {
+      filtered = tasks.filter(task => task.archived);
+    } else if (filterBy && categories.some(cat => cat.name === filterBy)) {
+      filtered = tasks.filter(task => task.category === filterBy && !task.archived);
+    } else {
+      filtered = tasks.filter(task => !task.archived);
     }
 
     return filtered;
@@ -290,6 +311,12 @@ const Dashboard = () => {
       setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
     }
     setShowTaskModal(true);
+  };
+
+  // Open Task Details Modal
+  const openTaskDetailsModal = (task) => {
+    setSelectedTask(task);
+    setShowTaskDetailsModal(true);
   };
 
   const openCategoryModal = (category = null) => {
@@ -371,13 +398,17 @@ const Dashboard = () => {
                 </h3>
                 <div className="space-y-1">
                   {categories.map(category => (
-                    <div key={category.id} className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-700">
+                    <button
+                      key={category.id}
+                      onClick={() => { setFilterBy(category.name); setCurrentView('tasks'); setSidebarOpen(false); }}
+                      className={`flex items-center justify-between w-full px-3 py-2 rounded-md transition-colors text-left ${filterBy === category.name ? 'bg-blue-600 text-white' : 'hover:bg-gray-700'}`}
+                    >
                       <div className="flex items-center">
                         <div className={`w-3 h-3 rounded-full ${category.color} mr-2`}></div>
                         <span className="text-sm">{category.name}</span>
                       </div>
                       <span className="text-xs text-gray-400">{category.count}</span>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -479,9 +510,13 @@ const Dashboard = () => {
 
                   <div className="space-y-4">
                     {tasks.filter(task => !task.archived).slice(0, 5).map(task => (
-                      <div key={task.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+                      <div
+                        key={task.id}
+                        className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+                        onClick={() => openTaskDetailsModal(task)}
+                      >
                         <button
-                          onClick={() => toggleTaskComplete(task.id)}
+                          onClick={e => { e.stopPropagation(); toggleTaskComplete(task.id); }}
                           className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${task.completed
                               ? 'bg-green-500 border-green-500'
                               : 'border-gray-400 hover:border-green-400'
@@ -570,10 +605,14 @@ const Dashboard = () => {
                       <div className="text-center text-gray-400 py-8">No tasks found.</div>
                     ) : (
                       filteredTasks.map(task => (
-                        <div key={task.id} className="bg-gray-900 rounded-lg border border-gray-800 p-6 hover:shadow-lg transition-shadow">
+                        <div
+                          key={task.id}
+                          className="bg-gray-900 rounded-lg border border-gray-800 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                          onClick={() => openTaskDetailsModal(task)}
+                        >
                           <div className="flex items-start space-x-4">
                             <button
-                              onClick={() => toggleTaskComplete(task.id)}
+                              onClick={e => { e.stopPropagation(); toggleTaskComplete(task.id); }}
                               className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors mt-1 ${task.completed
                                   ? 'bg-green-500 border-green-500'
                                   : 'border-gray-400 hover:border-green-400'
@@ -608,21 +647,21 @@ const Dashboard = () => {
                             </div>
                             <div className="flex items-center space-x-2">
                               <button
-                                onClick={() => openTaskModal(task)}
+                                onClick={e => { e.stopPropagation(); openTaskModal(task); }}
                                 className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
                                 aria-label="Edit task"
                               >
                                 <Edit size={16} />
                               </button>
                               <button
-                                onClick={() => archiveTask(task.id)}
+                                onClick={e => { e.stopPropagation(); archiveTask(task.id); }}
                                 className="p-2 text-gray-400 hover:text-yellow-400 hover:bg-gray-800 rounded-lg transition-colors"
                                 aria-label="Archive task"
                               >
                                 <Archive size={16} />
                               </button>
                               <button
-                                onClick={() => deleteTask(task.id)}
+                                onClick={e => { e.stopPropagation(); deleteTask(task.id); }}
                                 className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
                                 aria-label="Delete task"
                               >
@@ -638,82 +677,85 @@ const Dashboard = () => {
 
                 {/* Kanban View */}
                 {viewMode === 'kanban' && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {['todo', 'in-progress', 'done'].map(status => (
-                      <div key={status} className="bg-gray-900 rounded-lg border border-gray-800 p-4">
-                        <h3 className="font-semibold mb-4 capitalize">
-                          {status === 'in-progress' ? 'In Progress' : status}
-                          <span className="ml-2 text-sm text-gray-400">
-                            ({filteredTasks.filter(task => task.status === status).length})
-                          </span>
-                        </h3>
-
-                        <div className="space-y-3">
-                          {filteredTasks.filter(task => task.status === status).map(task => (
-                            <div key={task.id} className="bg-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                              <div className="flex items-start justify-between mb-2">
-                                <h4 className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>
-                                  {task.title}
-                                </h4>
-                                <div className="flex space-x-1">
-                                  <button
-                                    onClick={() => openTaskModal(task)}
-                                    className="p-1 text-gray-400 hover:text-blue-400 hover:bg-gray-900 transition-colors"
-                                  >
-                                    <Edit size={14} />
-                                  </button>
-                                  <button
-                                    onClick={() => deleteTask(task.id)}
-                                    className="p-1 text-gray-400 hover:text-red-400 hover:bg-gray-900 transition-colors"
-                                  >
-                                    <Trash2 size={14} />
-                                  </button>
-                                </div>
-                              </div>
-
-                              {task.description && (
-                                <p className="text-sm text-gray-400 mb-3">{task.description}</p>
+                  filteredTasks.length === 0 ? (
+                    <div className="text-center text-gray-400 py-8">No tasks found.</div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {['todo', 'in-progress', 'done'].map(status => {
+                        const statusTasks = filteredTasks.filter(task => task.status === status);
+                        return (
+                          <div key={status} className="bg-gray-900 rounded-lg border border-gray-800 p-4">
+                            <h3 className="font-semibold mb-4 capitalize">
+                              {status === 'in-progress' ? 'In Progress' : status.charAt(0).toUpperCase() + status.slice(1)}
+                              <span className="ml-2 text-sm text-gray-400">
+                                ({statusTasks.length})
+                              </span>
+                            </h3>
+                            <div className="space-y-3">
+                              {statusTasks.length === 0 ? (
+                                <div className="text-gray-500 text-sm">No tasks</div>
+                              ) : (
+                                statusTasks.map(task => (
+                                  <div key={task.id} className="bg-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                                    <div className="flex items-start justify-between mb-2">
+                                      <h4 className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>{task.title}</h4>
+                                      <div className="flex space-x-1">
+                                        <button
+                                          onClick={() => openTaskModal(task)}
+                                          className="p-1 text-gray-400 hover:text-blue-400 hover:bg-gray-900 transition-colors"
+                                        >
+                                          <Edit size={14} />
+                                        </button>
+                                        <button
+                                          onClick={() => deleteTask(task.id)}
+                                          className="p-1 text-gray-400 hover:text-red-400 hover:bg-gray-900 transition-colors"
+                                        >
+                                          <Trash2 size={14} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                    {task.description && (
+                                      <p className="text-sm text-gray-400 mb-3">{task.description}</p>
+                                    )}
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center space-x-2">
+                                        {task.category && (
+                                          <span className={`px-2 py-1 rounded text-xs font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'} text-white`}>
+                                            {task.category}
+                                          </span>
+                                        )}
+                                        <span className={`px-2 py-1 rounded text-xs font-medium border ${priorityColors[task.priority]}`}>
+                                          {task.priority}
+                                        </span>
+                                      </div>
+                                      {task.dueDate && (
+                                        <span className="text-xs text-gray-400 flex items-center">
+                                          <Calendar size={12} className="mr-1" />
+                                          {task.dueDate}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="mt-3 flex items-center">
+                                      <button
+                                        onClick={() => toggleTaskComplete(task.id)}
+                                        className={`flex items-center text-sm font-medium transition-colors ${task.completed
+                                          ? 'text-green-400 hover:text-green-300'
+                                          : 'text-gray-400 hover:text-green-400'
+                                        }`}
+                                      >
+                                        <CheckCircle size={16} className="mr-1" />
+                                        {task.completed ? 'Completed' : 'Mark Complete'}
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))
                               )}
-
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                  {task.category && (
-                                    <span className={`px-2 py-1 rounded text-xs font-medium ${categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                                      } text-white`}>
-                                      {task.category}
-                                    </span>
-                                  )}
-                                  <span className={`px-2 py-1 rounded text-xs font-medium border ${priorityColors[task.priority]}`}>
-                                    {task.priority}
-                                  </span>
-                                </div>
-
-                                {task.dueDate && (
-                                  <span className="text-xs text-gray-400 flex items-center">
-                                    <Calendar size={12} className="mr-1" />
-                                    {task.dueDate}
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="mt-3 flex items-center">
-                                <button
-                                  onClick={() => toggleTaskComplete(task.id)}
-                                  className={`flex items-center text-sm font-medium transition-colors ${task.completed
-                                      ? 'text-green-400 hover:text-green-300'
-                                      : 'text-gray-400 hover:text-green-400'
-                                    }`}
-                                >
-                                  <CheckCircle size={16} className="mr-1" />
-                                  {task.completed ? 'Completed' : 'Mark Complete'}
-                                </button>
-                              </div>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )
                 )}
               </div>
             )}
@@ -972,6 +1014,71 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
+
+      {/* Task Details Modal */}
+      {showTaskDetailsModal && selectedTask && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+              <h2 className="text-xl font-semibold">Task Details</h2>
+              <button
+                onClick={() => setShowTaskDetailsModal(false)}
+                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <span className="block text-xs text-gray-400 mb-1">Title</span>
+                <div className="text-lg font-bold mb-2">{selectedTask.title}</div>
+              </div>
+              <div>
+                <span className="block text-xs text-gray-400 mb-1">Description</span>
+                <div className="text-gray-300 mb-2">{selectedTask.description}</div>
+              </div>
+              <div className="flex space-x-4">
+                <div>
+                  <span className="block text-xs text-gray-400 mb-1">Due Date</span>
+                  <div className="text-gray-300">{selectedTask.dueDate ? selectedTask.dueDate.split('T')[0] : '—'}</div>
+                </div>
+                <div>
+                  <span className="block text-xs text-gray-400 mb-1">Priority</span>
+                  <div className={`inline-block px-2 py-1 rounded text-xs font-medium border ${priorityColors[selectedTask.priority]}`}>{selectedTask.priority}</div>
+                </div>
+              </div>
+              <div>
+                <span className="block text-xs text-gray-400 mb-1">Category</span>
+                <div className={`inline-block px-2 py-1 rounded text-xs font-medium ${categories.find(c => c.name === selectedTask.category)?.color || 'bg-gray-500'} text-white`}>
+                  {selectedTask.category || '—'}
+                </div>
+              </div>
+              <div className="flex space-x-4">
+                <div>
+                  <span className="block text-xs text-gray-400 mb-1">Status</span>
+                  <div className="text-gray-300">{selectedTask.completed ? 'Completed' : 'Pending'}</div>
+                </div>
+                <div>
+                  <span className="block text-xs text-gray-400 mb-1">Archived</span>
+                  <div className="text-gray-300">{selectedTask.archived ? 'Yes' : 'No'}</div>
+                </div>
+              </div>
+              <div>
+                <span className="block text-xs text-gray-400 mb-1">Created At</span>
+                <div className="text-gray-300">{selectedTask.createdAt ? selectedTask.createdAt.split('T')[0] : '—'}</div>
+              </div>
+            </div>
+            <div className="flex space-x-3 p-6 border-t border-gray-800">
+              <button
+                onClick={() => setShowTaskDetailsModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
