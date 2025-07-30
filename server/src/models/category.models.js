@@ -30,4 +30,5 @@ const categorySchema = new mongoose.Schema(
 
 categorySchema.index({userId:1,name:1},{unique:true})
 
-export default Category = model.mongoose("categorySchema", Category);
+const Category = mongoose.model("Category", categorySchema);
+export default Category;
