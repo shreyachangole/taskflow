@@ -6,12 +6,7 @@ import todos from "./routes/todos.js";
 import categories from "./routes/categories.js";
 const app=express();
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://taskflow-sagar.vercel.app",
-    "https://taskflow-indol-six.vercel.app"
-  ],
-  credentials: true
+  origin:'*', // Allow all origins for development; adjust for production
 }));
 app.use(cookieParser());
 app.use(express.json({limit:"16kb"}));
