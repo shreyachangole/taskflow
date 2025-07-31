@@ -316,8 +316,7 @@ const Dashboard = () => {
 
     axios.post('/api/categories', {
       name: categoryForm.name.trim(),
-      color: tailwindToHex(categoryForm.color),
-      userId: userId
+      color: tailwindToHex(categoryForm.color)
     }, axiosConfig)
       .then(res => {
         const cat = res.data.data.category;
@@ -335,20 +334,49 @@ const Dashboard = () => {
       });
   };
 
-  const updateCategory = () => {
+  const updateCategory = async () => {
     if (!editingCategory) return;
-    setCategories(prev => prev.map(cat =>
-      cat.id === editingCategory.id ? { ...cat, ...categoryForm } : cat
-    ));
-    setEditingCategory(null);
-    setCategoryForm({ name: '', color: 'bg-blue-500' });
-    setShowCategoryModal(false);
-    showNotification('Category updated successfully!');
+    
+    // Don't allow editing default categories
+    if (editingCategory.id.startsWith('default-')) {
+      showNotification('Cannot modify default categories', 'error');
+      return;
+    }
+
+    try {
+      const res = await axios.put(`/api/categories/${editingCategory.id}`, {
+        name: categoryForm.name.trim(),
+        color: tailwindToHex(categoryForm.color)
+      }, axiosConfig);
+
+      setCategories(prev => prev.map(cat =>
+        cat.id === editingCategory.id ? { ...cat, ...res.data.data.category } : cat
+      ));
+      setEditingCategory(null);
+      setCategoryForm({ name: '', color: 'bg-blue-500' });
+      setShowCategoryModal(false);
+      showNotification('Category updated successfully!');
+    } catch (err) {
+      const msg = err?.response?.data?.message || 'Error updating category';
+      showNotification(msg, 'error');
+    }
   };
 
-  const deleteCategory = (categoryId) => {
-    setCategories(prev => prev.filter(cat => cat.id !== categoryId));
-    showNotification('Category deleted successfully!');
+  const deleteCategory = async (categoryId) => {
+    // Don't allow deleting default categories
+    if (categoryId.startsWith('default-')) {
+      showNotification('Cannot delete default categories', 'error');
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/categories/${categoryId}`, axiosConfig);
+      setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+      showNotification('Category deleted successfully!');
+    } catch (err) {
+      const msg = err?.response?.data?.message || 'Error deleting category';
+      showNotification(msg, 'error');
+    }
   };
 
   const colorOptions = [
@@ -502,6 +530,11 @@ const Dashboard = () => {
                       <div className="flex items-center">
                         <div className={`w-3 h-3 rounded-full ${category.color} mr-3`}></div>
                         <span className="text-sm">{category.name}</span>
+                        {category.id.startsWith('default-') && (
+                          <span className="ml-2 text-xs text-gray-500 bg-gray-800/50 px-1.5 py-0.5 rounded">
+                            Default
+                          </span>
+                        )}
                       </div>
                       <span className="text-xs text-gray-400">{category.count}</span>
                     </button>
@@ -918,20 +951,28 @@ const Dashboard = () => {
                           <h3 className="text-lg font-semibold truncate text-white">{category.name}</h3>
                         </div>
                         <div className="flex space-x-2 flex-shrink-0 ml-3">
-                          <button
-                            onClick={() => openCategoryModal(category)}
-                            className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
-                            aria-label="Edit category"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button
-                            onClick={() => deleteCategory(category.id)}
-                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                            aria-label="Delete category"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                          {!category.id.startsWith('default-') ? (
+                            <>
+                              <button
+                                onClick={() => openCategoryModal(category)}
+                                className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+                                aria-label="Edit category"
+                              >
+                                <Edit size={16} />
+                              </button>
+                              <button
+                                onClick={() => deleteCategory(category.id)}
+                                className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                                aria-label="Delete category"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </>
+                          ) : (
+                            <span className="text-xs text-gray-500 px-2 py-1 bg-gray-800/50 rounded-lg">
+                              Default
+                            </span>
+                          )}
                         </div>
                       </div>
 

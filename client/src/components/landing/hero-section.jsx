@@ -15,7 +15,7 @@ export function HeroSection() {
         {/* Badge */}
         <Badge variant="outline" className="mb-4 bg-blue-600 border-blue-600 text-white">
           <Star className="mr-1 h-3 w-3" />
-          New: AI-powered task suggestions
+          Completely Free Forever
         </Badge>
 
         {/* Heading */}
@@ -27,7 +27,7 @@ export function HeroSection() {
         {/* Subheading */}
         <p className="max-w-[750px] text-center text-lg text-gray-400 sm:text-xl">
           TaskFlow helps you manage your daily tasks, set priorities, and achieve your goals 
-          with a beautiful and intuitive interface.
+          with a beautiful and intuitive interface. No hidden costs, no limitations.
         </p>
 
         {/* CTA Buttons */}
@@ -53,8 +53,8 @@ export function HeroSection() {
             <span>Tasks Completed</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-white">99.9%</span>
-            <span>Uptime</span>
+            <span className="font-semibold text-white">100%</span>
+            <span>Free Forever</span>
           </div>
         </div>
       </div>

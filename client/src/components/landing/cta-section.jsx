@@ -22,21 +22,21 @@ export function CTASection() {
           
           <p className="max-w-[85%] text-gray-400 sm:text-lg">
             Join thousands of users who have transformed their task management with TaskFlow. 
-            Start your free trial today and experience the difference.
+            Start organizing your tasks today - completely free, no strings attached.
           </p>
           
           <div className="flex flex-col gap-2 min-[400px]:flex-row mt-4">
             <Button size="lg" className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate('/signup')}>
-              Start Free Trial
+              Get Started Free
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-8 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white">
-              Schedule Demo
+              Learn More
             </Button>
           </div>
           
           <p className="text-xs text-gray-500 mt-4">
-            No credit card required • 14-day free trial • Cancel anytime
+            No credit card required • No hidden fees • No limitations • Free forever
           </p>
         </div>
       </div>
