@@ -22,7 +22,10 @@ import {
   Moon,
   Sun,
   Home,
-  Folder
+  Folder,
+  TrendingUp,
+  Target,
+  Zap
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -370,11 +373,11 @@ const Dashboard = () => {
   const stats = getStats();
 
   return (
-    <div className="min-h-screen bg-gray-800 text-white mt-10 rounded-lg shadow-lg">
+    <div className="min-h-screen bg-black text-white">
       {/* Hamburger Menu Button - Fixed position on left for mobile */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-4 left-4 z-50 p-3 bg-blue-700 rounded-xl shadow-xl hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-800 transition-all duration-200 md:hidden"
+        className="fixed top-2 left-4 z-50 p-3 bg-blue-600 rounded-xl shadow-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-700 transition-all duration-200 md:hidden"
         aria-label="Toggle menu"
       >
         <Menu size={24} className="text-white" />
@@ -385,14 +388,13 @@ const Dashboard = () => {
         <div className={`
           fixed inset-y-0 left-0 z-40 w-72 transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          bg-blue-900 border-r border-blue-800 shadow-2xl
+          bg-gray-900/95 backdrop-blur-xl border-r border-gray-800 shadow-2xl
           md:static md:translate-x-0 md:w-72
         `}>
-          <div className="h-full flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-blue-800 scrollbar-track-blue-900">
+          <div className="h-full flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
             {/* Sidebar Header */}
-            <div className="px-6 py-6 border-b border-blue-800 sticky top-0 bg-gray-900 z-10">
+            <div className="px-6 py-6 border-b border-gray-800 sticky top-0 bg-gray-900/95 backdrop-blur-xl z-10">
               <div className="flex items-center justify-between">
-    
                 <button
                   onClick={() => setSidebarOpen(false)}
                   className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 md:hidden"
@@ -401,24 +403,24 @@ const Dashboard = () => {
                 </button>
               </div>
               {/* User Info */}
-              <div className="mt-6 flex items-center gap-3 p-3 bg-blue-800/60 rounded-xl border border-blue-700/50 shadow-inner">
-                <div className="w-11 h-11 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                  <User size={20} />
+              <div className="mt-6 flex items-center gap-3 p-4 bg-blue-600/20 rounded-xl border border-blue-700/30 shadow-inner backdrop-blur-sm">
+                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                  <User size={20} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold">{user?.name || 'User'}</p>
-                  <p className="text-xs text-gray-400">Welcome back!</p>
+                  <p className="text-base font-semibold text-white">{user?.name || 'User'}</p>
+                  <p className="text-xs text-gray-300">Welcome back!</p>
                 </div>
               </div>
             </div>
 
             {/* Navigation */}
-            <div className="px-4 py-4 bg-gray-900 ">
-              <div className="space-y-2">
+            <div className="px-4 py-6 bg-gray-900/95 backdrop-blur-xl">
+              <div className="space-y-3">
                 <button
                   onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-base font-semibold transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
-                    ${currentView === 'dashboard' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md' : 'hover:bg-gray-800/80 hover:scale-[1.03]'}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
+                    ${currentView === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-800/80 hover:scale-[1.02] text-gray-300'}
                   `}
                 >
                   <Home size={18} className="mr-2" />
@@ -426,8 +428,8 @@ const Dashboard = () => {
                 </button>
                 <button
                   onClick={() => { setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-base font-semibold transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
-                    ${currentView === 'tasks' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md' : 'hover:bg-gray-800/80 hover:scale-[1.03]'}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
+                    ${currentView === 'tasks' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-800/80 hover:scale-[1.02] text-gray-300'}
                   `}
                 >
                   <CheckSquare size={18} className="mr-2" />
@@ -435,8 +437,8 @@ const Dashboard = () => {
                 </button>
                 <button
                   onClick={() => { setCurrentView('categories'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-base font-semibold transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
-                    ${currentView === 'categories' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md' : 'hover:bg-gray-800/80 hover:scale-[1.03]'}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-blue-600/20
+                    ${currentView === 'categories' ? 'bg-blue-600 text-white shadow-lg' : 'hover:bg-gray-800/80 hover:scale-[1.02] text-gray-300'}
                   `}
                 >
                   <Folder size={18} className="mr-2" />
@@ -445,36 +447,39 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex-1 px-4 py-4 overflow-y-auto scrollbar-thin bg-gray-900 scrollbar-thumb-gray-800 scrollbar-track-gray-900">
+            <div className="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin bg-gray-900/95 backdrop-blur-xl scrollbar-thumb-gray-700 scrollbar-track-gray-900">
               <div className="space-y-2">
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                  Quick Filters
+                </h3>
                 <button
                   onClick={() => { setFilterBy('all'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'all' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    filterBy === 'all' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
                   }`}
                 >
                   All Tasks
                 </button>
                 <button
                   onClick={() => { setFilterBy('today'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'today' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    filterBy === 'today' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
                   }`}
                 >
                   Today
                 </button>
                 <button
                   onClick={() => { setFilterBy('upcoming'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'upcoming' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    filterBy === 'upcoming' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
                   }`}
                 >
                   Upcoming
                 </button>
                 <button
                   onClick={() => { setFilterBy('completed'); setCurrentView('tasks'); setSidebarOpen(false); }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filterBy === 'completed' ? 'bg-blue-600 text-white' : 'hover:bg-gray-800'
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    filterBy === 'completed' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
                   }`}
                 >
                   Completed
@@ -482,16 +487,16 @@ const Dashboard = () => {
               </div>
 
               <div className="mt-8">
-                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
                   Categories
                 </h3>
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {categories.map(category => (
                     <button
                       key={category.id}
                       onClick={() => { setFilterBy(category.name); setCurrentView('tasks'); setSidebarOpen(false); }}
-                      className={`flex items-center justify-between w-full px-3 py-2 rounded-md transition-colors text-left ${
-                        filterBy === category.name ? 'bg-blue-600 text-white' : 'hover:bg-gray-700'
+                      className={`flex items-center justify-between w-full px-3 py-2 rounded-lg transition-all text-left ${
+                        filterBy === category.name ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
                       }`}
                     >
                       <div className="flex items-center">
@@ -505,10 +510,10 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="px-4 py-4 border-t border-blue-800 bg-gray-900">
+            <div className="px-4 py-6 border-t border-gray-800 bg-gray-900/95 backdrop-blur-xl">
               <button
                 onClick={() => openCategoryModal()}
-                className="w-full flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+                className="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all text-sm font-semibold shadow-lg"
               >
                 <Plus size={16} className="mr-2" />
                 Add Category
@@ -520,96 +525,108 @@ const Dashboard = () => {
         {/* Overlay for mobile */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-30"
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
 
         {/* Main Content */}
-        <div className="flex-1 min-h-screen">
+        <div className="flex-1 min-h-screen bg-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20">
             {/* Dashboard View */}
             {currentView === 'dashboard' && (
               <div>
-                <div className="mb-6 sm:mb-8">
-                  <h1 className="text-2xl sm:text-3xl font-bold mb-2">Dashboard</h1>
-                  <p className="text-gray-400 text-sm sm:text-base">Welcome back! Here's your productivity overview.</p>
+                <div className="mb-8">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-white">Dashboard</h1>
+                  <p className="text-gray-400 text-lg">Welcome back! Here's your productivity overview.</p>
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  <div className="bg-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-blue-700/30 shadow-xl">
                     <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-blue-500 bg-opacity-20">
-                        <CheckSquare className="text-blue-500" size={20} />
+                      <div className="p-3 rounded-xl bg-blue-500/20 backdrop-blur-sm">
+                        <CheckSquare className="text-blue-400" size={24} />
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-400">Total Tasks</p>
-                        <p className="text-xl sm:text-2xl font-bold">{stats.total}</p>
+                        <p className="text-sm font-medium text-gray-300">Total Tasks</p>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.total}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800">
+                  <div className="bg-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-blue-700/30 shadow-xl">
                     <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-green-500 bg-opacity-20">
-                        <CheckCircle className="text-green-500" size={20} />
+                      <div className="p-3 rounded-xl bg-green-500/20 backdrop-blur-sm">
+                        <CheckCircle className="text-green-400" size={24} />
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-400">Completed</p>
-                        <p className="text-xl sm:text-2xl font-bold">{stats.completed}</p>
+                        <p className="text-sm font-medium text-gray-300">Completed</p>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.completed}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800 sm:col-span-2 lg:col-span-1">
+                  <div className="bg-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-blue-700/30 shadow-xl">
                     <div className="flex items-center">
-                      <div className="p-3 rounded-full bg-red-500 bg-opacity-20">
-                        <AlertCircle className="text-red-500" size={20} />
+                      <div className="p-3 rounded-xl bg-red-500/20 backdrop-blur-sm">
+                        <AlertCircle className="text-red-400" size={24} />
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-400">Overdue</p>
-                        <p className="text-xl sm:text-2xl font-bold">{stats.overdue}</p>
+                        <p className="text-sm font-medium text-gray-300">Overdue</p>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.overdue}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-blue-700/30 shadow-xl">
+                    <div className="flex items-center">
+                      <div className="p-3 rounded-xl bg-purple-500/20 backdrop-blur-sm">
+                        <Archive className="text-purple-400" size={24} />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-300">Archived</p>
+                        <p className="text-2xl sm:text-3xl font-bold text-white">{stats.archived}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Recent Tasks */}
-                <div className="bg-gray-900 rounded-lg border border-gray-800 p-4 sm:p-6">
-                  <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <h2 className="text-lg sm:text-xl font-semibold">Recent Tasks</h2>
+                <div className="bg-blue-600/20 backdrop-blur-xl rounded-2xl border border-blue-700/30 p-6 shadow-xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl sm:text-2xl font-semibold text-white">Recent Tasks</h2>
                     <button
                       onClick={() => setCurrentView('tasks')}
-                      className="text-blue-400 hover:text-blue-300 text-sm font-medium"
+                      className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
                     >
                       View All
                     </button>
                   </div>
-                  <div className="space-y-3 sm:space-y-4">
+                  <div className="space-y-4">
                     {tasks.filter(task => !task.archived).slice(0, 5).map(task => (
                       <div
                         key={task.id}
-                        className="flex items-center space-x-3 sm:space-x-4 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+                        className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-800/50 transition-all cursor-pointer border border-gray-700/30"
                         onClick={() => openTaskDetailsModal(task)}
                       >
                         <button
                           onClick={e => { e.stopPropagation(); toggleTaskComplete(task.id); }}
-                          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                          className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
                             task.completed
                               ? 'bg-green-500 border-green-500'
-                              : 'border-gray-400 hover:border-green-400'
+                              : 'border-gray-500 hover:border-green-400'
                           }`}
                         >
-                          {task.completed && <CheckCircle size={12} className="text-white" />}
+                          {task.completed && <CheckCircle size={14} className="text-white" />}
                         </button>
                         <div className="flex-1 min-w-0">
-                          <p className={`font-medium truncate ${task.completed ? 'line-through text-gray-500' : ''}`}>
+                          <p className={`font-medium truncate ${task.completed ? 'line-through text-gray-500' : 'text-white'}`}>
                             {task.title}
                           </p>
-                          <div className="flex items-center space-x-2 sm:space-x-4 mt-1 flex-wrap">
+                          <div className="flex items-center space-x-3 mt-2 flex-wrap">
                             {task.category && (
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                 categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
                               } text-white`}>
                                 {task.category}
@@ -621,7 +638,7 @@ const Dashboard = () => {
                                 {new Date(task.dueDate).toLocaleDateString()}
                               </span>
                             )}
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
                               {task.priority}
                             </span>
                           </div>
@@ -636,114 +653,123 @@ const Dashboard = () => {
             {/* Tasks View */}
             {currentView === 'tasks' && (
               <div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 space-y-4 sm:space-y-0">
-                  <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-                      {filterBy === 'all' && 'All Tasks'}
-                      {filterBy === 'today' && 'Today\'s Tasks'}
-                      {filterBy === 'upcoming' && 'Upcoming Tasks'}
-                      {filterBy === 'completed' && 'Completed Tasks'}
-                      {categories.find(c => c.name === filterBy) && `${filterBy} Tasks`}
-                    </h1>
-                    <p className="text-gray-400 text-sm sm:text-base">{filteredTasks.length} tasks</p>
-                  </div>
-
-                  <div className="flex items-center space-x-3">
-                    <div className="flex rounded-lg overflow-hidden border border-gray-600">
-                      <button
-                        onClick={() => setViewMode('list')}
-                        className={`px-3 py-2 text-sm font-medium transition-colors ${
-                          viewMode === 'list' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
-                        }`}
-                      >
-                        <List size={16} />
-                      </button>
-                      <button
-                        onClick={() => setViewMode('kanban')}
-                        className={`px-3 py-2 text-sm font-medium transition-colors ${
-                          viewMode === 'kanban' ? 'bg-blue-500 text-white' : 'hover:bg-gray-700'
-                        }`}
-                      >
-                        <Grid size={16} />
-                      </button>
+                <div className="mb-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div>
+                      <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-white">
+                        {filterBy === 'all' && 'All Tasks'}
+                        {filterBy === 'today' && 'Today\'s Tasks'}
+                        {filterBy === 'upcoming' && 'Upcoming Tasks'}
+                        {filterBy === 'completed' && 'Completed Tasks'}
+                        {categories.find(c => c.name === filterBy) && `${filterBy} Tasks`}
+                      </h1>
+                      <p className="text-gray-400 text-lg">{filteredTasks.length} tasks</p>
                     </div>
 
-                    <button
-                      onClick={() => openTaskModal()}
-                      className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center text-sm"
-                    >
-                      <Plus size={16} className="mr-1 sm:mr-2" />
-                      <span className="hidden sm:inline">Add Task</span>
-                      <span className="sm:hidden">Add</span>
-                    </button>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex rounded-xl overflow-hidden border border-gray-700 bg-gray-900/50 backdrop-blur-sm">
+                        <button
+                          onClick={() => setViewMode('list')}
+                          className={`px-4 py-2 text-sm font-medium transition-all ${
+                            viewMode === 'list' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
+                          }`}
+                        >
+                          <List size={16} />
+                        </button>
+                        <button
+                          onClick={() => setViewMode('kanban')}
+                          className={`px-4 py-2 text-sm font-medium transition-all ${
+                            viewMode === 'kanban' ? 'bg-blue-600 text-white shadow-md' : 'hover:bg-gray-800/80 text-gray-300'
+                          }`}
+                        >
+                          <Grid size={16} />
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => openTaskModal()}
+                        className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all flex items-center text-sm font-semibold shadow-lg"
+                      >
+                        <Plus size={16} className="mr-2" />
+                        <span className="hidden sm:inline">Add Task</span>
+                        <span className="sm:hidden">Add</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* List View */}
                 {viewMode === 'list' && (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {loadingTasks ? (
-                      <div className="text-center text-gray-400 py-8">Loading tasks...</div>
+                      <div className="text-center text-gray-400 py-12">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                        Loading tasks...
+                      </div>
                     ) : filteredTasks.length === 0 ? (
-                      <div className="text-center text-gray-400 py-8">No tasks found.</div>
+                      <div className="text-center text-gray-400 py-12">
+                        <CheckSquare size={48} className="mx-auto mb-4 text-gray-600" />
+                        <p className="text-lg font-medium">No tasks found</p>
+                        <p className="text-sm">Create your first task to get started</p>
+                      </div>
                     ) : (
                       filteredTasks.map(task => (
                         <div
                           key={task.id}
-                          className="bg-gray-900 rounded-lg border border-gray-800 p-4 sm:p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                          className="bg-blue-600/20 backdrop-blur-xl rounded-2xl border border-blue-700/30 p-6 hover:shadow-xl transition-all cursor-pointer hover:scale-[1.02] hover:border-blue-600/50"
                           onClick={() => openTaskDetailsModal(task)}
                         >
-                          <div className="flex items-start space-x-3 sm:space-x-4">
+                          <div className="flex items-start space-x-4">
                             <button
                               onClick={e => { e.stopPropagation(); toggleTaskComplete(task.id); }}
-                              className={`w-5 sm:w-6 h-5 sm:h-6 rounded border-2 flex items-center justify-center transition-colors mt-1 ${
+                              className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all mt-1 ${
                                 task.completed
-                                  ? 'bg-green-500 border-green-500'
-                                  : 'border-gray-400 hover:border-green-400'
+                                  ? 'bg-green-500 border-green-500 shadow-lg'
+                                  : 'border-gray-500 hover:border-green-400 hover:bg-green-500/10'
                               }`}
                             >
                               {task.completed && <CheckCircle size={14} className="text-white" />}
                             </button>
                             <div className="flex-1 min-w-0">
-                              <h3 className={`text-base sm:text-lg font-semibold mb-2 ${task.completed ? 'line-through text-gray-500' : ''}`}>
+                              <h3 className={`text-lg font-semibold mb-3 ${task.completed ? 'line-through text-gray-500' : 'text-white'}`}>
                                 {task.title}
                               </h3>
                               {task.description && (
-                                <p className="text-gray-400 mb-3 text-sm sm:text-base line-clamp-2">{task.description}</p>
+                                <p className="text-gray-400 mb-4 text-sm line-clamp-2">{task.description}</p>
                               )}
-                              <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap gap-2">
+                              <div className="flex items-center space-x-3 flex-wrap gap-2">
                                 {task.category && (
-                                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                     categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                                  } text-white`}>
+                                  } text-white shadow-sm`}>
                                     {task.category}
                                   </span>
                                 )}
                                 {task.dueDate && (
-                                  <span className="text-xs sm:text-sm text-gray-400 flex items-center">
+                                  <span className="text-xs text-gray-400 flex items-center">
                                     <Calendar size={12} className="mr-1" />
                                     {new Date(task.dueDate).toLocaleDateString()}
                                   </span>
                                 )}
-                                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${priorityColors[task.priority]}`}>
+                                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
                                   {task.priority}
                                 </span>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                            <div className="flex items-center space-x-2 flex-shrink-0">
                               <button
                                 onClick={e => { e.stopPropagation(); openTaskModal(task); }}
-                                className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
+                                className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                                 aria-label="Edit task"
                               >
-                                <Edit size={14} />
+                                <Edit size={16} />
                               </button>
                               <button
                                 onClick={e => { e.stopPropagation(); deleteTask(task.id); }}
-                                className="p-1.5 sm:p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                                className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                                 aria-label="Delete task"
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={16} />
                               </button>
                             </div>
                           </div>
@@ -757,9 +783,13 @@ const Dashboard = () => {
                 {viewMode === 'kanban' && (
                   <div className="overflow-x-auto">
                     {filteredTasks.length === 0 ? (
-                      <div className="text-center text-gray-400 py-8">No tasks found.</div>
+                      <div className="text-center text-gray-400 py-12">
+                        <Grid size={48} className="mx-auto mb-4 text-gray-600" />
+                        <p className="text-lg font-medium">No tasks found</p>
+                        <p className="text-sm">Create your first task to get started</p>
+                      </div>
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-w-full">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-w-full">
                         {['todo', 'in-progress', 'done'].map(status => {
                           const statusTasks = filteredTasks.filter(task => {
                             if (status === 'todo') return !task.completed && task.status !== 'in-progress';
@@ -771,56 +801,56 @@ const Dashboard = () => {
                           return (
                             <div
                               key={status}
-                              className="bg-gray-900 rounded-lg border border-gray-800 p-4 sm:p-6 flex flex-col min-h-[300px]"
+                              className="bg-blue-600/20 backdrop-blur-xl rounded-2xl border border-blue-700/30 p-6 flex flex-col min-h-[400px] shadow-xl"
                             >
-                              <h3 className="font-semibold mb-4 capitalize text-sm sm:text-base">
+                              <h3 className="font-semibold mb-6 capitalize text-lg text-white">
                                 {status === 'in-progress' ? 'In Progress' : status === 'todo' ? 'To Do' : 'Done'}
-                                <span className="ml-2 text-sm text-gray-400">
-                                  ({statusTasks.length})
+                                <span className="ml-3 text-sm text-gray-400 bg-gray-800/50 px-3 py-1 rounded-full">
+                                  {statusTasks.length}
                                 </span>
                               </h3>
-                              <div className="space-y-3 flex-1">
+                              <div className="space-y-4 flex-1">
                                 {statusTasks.length === 0 ? (
-                                  <div className="text-gray-500 text-sm">No tasks</div>
+                                  <div className="text-gray-500 text-sm text-center py-8">No tasks</div>
                                 ) : (
                                   statusTasks.map(task => (
                                     <div 
                                       key={task.id} 
-                                      className="bg-gray-800 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                      className="bg-blue-600/30 backdrop-blur-sm rounded-xl p-4 hover:shadow-lg transition-all cursor-pointer hover:scale-[1.02] border border-blue-700/30"
                                       onClick={() => openTaskDetailsModal(task)}
                                     >
-                                      <div className="flex items-start justify-between mb-2">
-                                        <h4 className={`font-medium text-sm sm:text-base ${task.completed ? 'line-through text-gray-500' : ''} pr-2`}>
+                                      <div className="flex items-start justify-between mb-3">
+                                        <h4 className={`font-medium text-sm ${task.completed ? 'line-through text-gray-500' : 'text-white'} pr-2`}>
                                           {task.title}
                                         </h4>
                                         <div className="flex space-x-1 flex-shrink-0">
                                           <button
                                             onClick={e => { e.stopPropagation(); openTaskModal(task); }}
-                                            className="p-1 text-gray-400 hover:text-blue-400 hover:bg-gray-900 transition-colors"
+                                            className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                                           >
                                             <Edit size={12} />
                                           </button>
                                           <button
                                             onClick={e => { e.stopPropagation(); deleteTask(task.id); }}
-                                            className="p-1 text-gray-400 hover:text-red-400 hover:bg-gray-900 transition-colors"
+                                            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                                           >
                                             <Trash2 size={12} />
                                           </button>
                                         </div>
                                       </div>
                                       {task.description && (
-                                        <p className="text-xs sm:text-sm text-gray-400 mb-3 line-clamp-2">{task.description}</p>
+                                        <p className="text-xs text-gray-400 mb-3 line-clamp-2">{task.description}</p>
                                       )}
                                       <div className="flex items-center justify-between flex-wrap gap-2">
                                         <div className="flex items-center space-x-2">
                                           {task.category && (
-                                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                               categories.find(c => c.name === task.category)?.color || 'bg-gray-500'
-                                            } text-white`}>
+                                            } text-white shadow-sm`}>
                                               {task.category}
                                             </span>
                                           )}
-                                          <span className={`px-2 py-1 rounded text-xs font-medium border ${priorityColors[task.priority]}`}>
+                                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${priorityColors[task.priority]}`}>
                                             {task.priority}
                                           </span>
                                         </div>
@@ -834,13 +864,13 @@ const Dashboard = () => {
                                       <div className="mt-3 flex items-center">
                                         <button
                                           onClick={e => { e.stopPropagation(); toggleTaskComplete(task.id); }}
-                                          className={`flex items-center text-xs sm:text-sm font-medium transition-colors ${
+                                          className={`flex items-center text-xs font-medium transition-all ${
                                             task.completed
                                               ? 'text-green-400 hover:text-green-300'
                                               : 'text-gray-400 hover:text-green-400'
                                           }`}
                                         >
-                                          <CheckCircle size={14} className="mr-1" />
+                                          <CheckCircle size={12} className="mr-1" />
                                           {task.completed ? 'Completed' : 'Mark Complete'}
                                         </button>
                                       </div>
@@ -861,51 +891,53 @@ const Dashboard = () => {
             {/* Categories View */}
             {currentView === 'categories' && (
               <div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 space-y-4 sm:space-y-0">
-                  <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-2">Categories</h1>
-                    <p className="text-gray-400 text-sm sm:text-base">Manage your task categories</p>
-                  </div>
+                <div className="mb-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div>
+                      <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-white">Categories</h1>
+                      <p className="text-gray-400 text-lg">Manage your task categories</p>
+                    </div>
 
-                  <button
-                    onClick={() => openCategoryModal()}
-                    className="px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center text-sm self-start sm:self-auto"
-                  >
-                    <Plus size={16} className="mr-1 sm:mr-2" />
-                    <span className="hidden sm:inline">Add Category</span>
-                    <span className="sm:hidden">Add</span>
-                  </button>
+                    <button
+                      onClick={() => openCategoryModal()}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all flex items-center text-sm font-semibold shadow-lg self-start sm:self-auto"
+                    >
+                      <Plus size={16} className="mr-2" />
+                      <span className="hidden sm:inline">Add Category</span>
+                      <span className="sm:hidden">Add</span>
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {categories.map(category => (
-                    <div key={category.id} className="bg-gray-900 rounded-lg border border-gray-800 p-4 sm:p-6">
-                      <div className="flex items-center justify-between mb-4">
+                    <div key={category.id} className="bg-blue-600/20 backdrop-blur-xl rounded-2xl border border-blue-700/30 p-6 hover:shadow-xl transition-all hover:scale-[1.02] hover:border-blue-600/50">
+                      <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center min-w-0 flex-1">
-                          <div className={`w-3 sm:w-4 h-3 sm:h-4 rounded-full ${category.color} mr-2 sm:mr-3 flex-shrink-0`}></div>
-                          <h3 className="text-base sm:text-lg font-semibold truncate">{category.name}</h3>
+                          <div className={`w-4 h-4 rounded-full ${category.color} mr-3 flex-shrink-0 shadow-sm`}></div>
+                          <h3 className="text-lg font-semibold truncate text-white">{category.name}</h3>
                         </div>
-                        <div className="flex space-x-1 sm:space-x-2 flex-shrink-0 ml-2">
+                        <div className="flex space-x-2 flex-shrink-0 ml-3">
                           <button
                             onClick={() => openCategoryModal(category)}
-                            className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                             aria-label="Edit category"
                           >
-                            <Edit size={14} />
+                            <Edit size={16} />
                           </button>
                           <button
                             onClick={() => deleteCategory(category.id)}
-                            className="p-1.5 sm:p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                             aria-label="Delete category"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={16} />
                           </button>
                         </div>
                       </div>
 
                       <div className="text-center">
-                        <p className="text-2xl sm:text-3xl font-bold text-blue-400 mb-1">{category.count}</p>
-                        <p className="text-xs sm:text-sm text-gray-400">
+                        <p className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">{category.count}</p>
+                        <p className="text-sm text-gray-400">
                           {category.count === 1 ? 'task' : 'tasks'}
                         </p>
                       </div>
