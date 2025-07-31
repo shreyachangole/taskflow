@@ -97,7 +97,7 @@ const Dashboard = () => {
           setCategories(cats);
         }
       })
-      .catch(err => {
+      .catch(() => {
         showNotification('Error fetching categories', 'error');
       });
     // eslint-disable-next-line
@@ -113,7 +113,6 @@ const Dashboard = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
   const [filterBy, setFilterBy] = useState('all');
-  const isDarkMode = true;
   const [notifications, setNotifications] = useState([]);
 
   // Task form state
@@ -277,6 +276,7 @@ const Dashboard = () => {
       });
   };
 
+  // Archive task functionality (currently unused but available for future use)
   const archiveTask = (taskId) => {
     axios.patch(`/api/todos/${taskId}`, { archived: true }, axiosConfig)
       .then(res => {

@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Play, Star } from "lucide-react";
-
+import { ArrowRight, Heart, Star } from "lucide-react";
+import image from "@/assets/image.png";
+import { MacbookScroll } from "@/components/landing/macbook-scroll";
+import { CheckSquare } from "lucide-react";
 export function HeroSection() {
   // Simple navigation function
   const navigate = (path) => {
@@ -10,7 +12,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="container relative bg-black">
+    <section className="container z-1 relative bg-black">
       <div className="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
         {/* Badge */}
         <Badge variant="outline" className="mb-4 bg-blue-600 border-blue-600 text-white">
@@ -36,9 +38,9 @@ export function HeroSection() {
             Get Started Free
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-          <Button variant="outline" size="lg" className="h-11 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white">
-            <Play className="mr-2 h-4 w-4" />
-            Watch Demo
+          <Button variant="outline" size="lg" className="h-11 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white" onClick={() => navigate('/about')}>
+            <Heart className="mr-2 h-4 w-4" />
+            Learn More
           </Button>
         </div>
 
@@ -58,17 +60,23 @@ export function HeroSection() {
           </div>
         </div>
       </div>
-
-      {/* Hero Image */}
-      <div className="relative mx-auto max-w-5xl">
-        <div className="relative rounded-xl border border-gray-800 bg-gray-900 shadow-2xl">
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20" />
-          <img
-            src="/api/placeholder/1200/600"
-            alt="TaskFlow Dashboard Preview"
-            className="relative rounded-xl opacity-90"
-          />
-        </div>
+      {/* Macbook Scroll Section */}
+      <div className="w-full rounded-lg overflow-hidden bg-white dark:bg-[#0B0B0F]">
+      <MacbookScroll
+        title={
+          <span>
+            TaskFlow: Modern Task Management for Everyone.<br />
+            Built with ❤️ using Tailwind CSS.
+          </span>
+        }
+        badge={
+          <div className="h-10 w-10 -rotate-12 transform flex items-center justify-center bg-blue-600 rounded-full shadow-lg border-4 border-white">
+             <CheckSquare className="text-blue-500 mr-3 transition-all duration-300 group-hover:text-blue-400 w-7 h-7" size={28} />
+          </div>
+        }
+        src={image}
+        showGradient={false}
+      />
       </div>
     </section>
   );
