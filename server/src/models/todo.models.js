@@ -36,9 +36,14 @@ const todoSchema=new mongoose.Schema(
             validator:function(value){
                 // Only validate if duedate is provided
                 if(!value) return true;
-                return value>new Date();
+                // Accept today or future
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const due = new Date(value);
+                due.setHours(0,0,0,0);
+                return due >= today;
             },
-            message:'Due date must be in the future'
+            message:'Due date must be today or in the future'
         }
     },
     userId:{

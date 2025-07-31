@@ -370,7 +370,7 @@ const Dashboard = () => {
   const stats = getStats();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white mt-10 rounded-lg shadow-lg">
+    <div className="min-h-screen bg-gray-800 text-white mt-10 rounded-lg shadow-lg">
       {/* Hamburger Menu Button - Fixed position on left for mobile */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -970,6 +970,7 @@ const Dashboard = () => {
                   type="date"
                   value={taskForm.dueDate}
                   onChange={e => setTaskForm({ ...taskForm, dueDate: e.target.value })}
+                  min={new Date().toISOString().split('T')[0]}
                   className="peer w-full px-4 pt-6 pb-2 border-2 border-blue-800 bg-blue-900 text-white rounded-xl focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400 placeholder-transparent text-base transition-all"
                   placeholder="Due Date"
                 />
