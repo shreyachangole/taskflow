@@ -3,6 +3,7 @@ import { LandingPage } from './pages/landing-page';
 import { LoginPage } from './pages/login-page';
 import { SignupPage } from './pages/signup-page';
 import Dashboard from './pages/dashboard.jsx';
+import AboutPage from './pages/about-page.jsx';
 import './App.css';
 import { useEffect } from 'react';
 import Navbar from './components/layout/navbar.jsx';
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

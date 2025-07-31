@@ -1,7 +1,20 @@
 import { CheckSquare, Github, Linkedin, Mail, Star, Zap, ExternalLink, Home, Monitor, Heart, Bolt } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
+
+  // Navigation function for internal links
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
+  // Handle contribute button click
+  const handleContribute = () => {
+    window.open('https://github.com/SagarSuryakantWaghmare/taskflow', '_blank');
+  };
+
   return (
     <footer className="bg-black text-white">
       <div className="container px-2 sm:px-4 py-8 sm:py-12 md:py-16">
@@ -41,6 +54,7 @@ export default function Footer() {
                 <Button 
                   size="sm"
                   className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 shadow-lg"
+                  onClick={handleContribute}
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   Contribute
@@ -52,37 +66,37 @@ export default function Footer() {
             <div className="flex flex-col items-center sm:items-start">
               <h3 className="font-semibold mb-4 text-white">Quick Links</h3>
               <ul className="space-y-3 text-sm w-full">
-                <li className="flex items-center space-x-3 w-full">
+                <li className="flex items-center space-x-3 w-full group cursor-pointer" onClick={() => handleNavigation('/')}>
                   <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-gray-800/50 border border-gray-700/50 group-hover:border-blue-400/50 transition-all duration-200">
                     <Home className="h-4 w-4 text-blue-400" />
                   </div>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors group">
+                  <span className="text-gray-300 hover:text-white transition-colors group">
                     Home
-                  </a>
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 w-full">
+                <li className="flex items-center space-x-3 w-full group cursor-pointer" onClick={() => handleNavigation('/dashboard')}>
                   <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-gray-800/50 border border-gray-700/50 group-hover:border-blue-400/50 transition-all duration-200">
                     <Monitor className="h-4 w-4 text-blue-400" />
                   </div>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors group">
+                  <span className="text-gray-300 hover:text-white transition-colors group">
                     Dashboard
-                  </a>
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 w-full">
+                <li className="flex items-center space-x-3 w-full group cursor-pointer" onClick={() => handleNavigation('/about')}>
                   <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-gray-800/50 border border-gray-700/50 group-hover:border-pink-500/50 transition-all duration-200">
                     <Heart className="h-4 w-4 text-blue-400" />
                   </div>
-                  <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors group">
+                  <span className="text-gray-300 hover:text-pink-400 transition-colors group">
                     About
-                  </a>
+                  </span>
                 </li>
-                <li className="flex items-center space-x-3 w-full">
+                <li className="flex items-center space-x-3 w-full group cursor-pointer" onClick={() => handleNavigation('/signup')}>
                   <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-gray-800/50 border border-gray-700/50 group-hover:border-yellow-500/50 transition-all duration-200">
                     <Bolt className="h-4 w-4 text-blue-400" />
                   </div>
-                  <a href="#" className="text-gray-300 hover:text-yellow-400 transition-colors group">
-                    Features
-                  </a>
+                  <span className="text-gray-300 hover:text-yellow-400 transition-colors group">
+                    Sign Up
+                  </span>
                 </li>
               </ul>
             </div>
@@ -153,12 +167,18 @@ export default function Footer() {
             <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center text-center md:text-left">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-300 justify-center md:justify-start">
                 <span>© 2025 TaskFlow. All rights reserved.</span>
-                <a href="#" className="hover:text-white transition-colors">
+                <button 
+                  onClick={() => handleNavigation('/')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
                   Privacy
-                </a>
-                <a href="#" className="hover:text-white transition-colors">
+                </button>
+                <button 
+                  onClick={() => handleNavigation('/')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
                   Terms
-                </a>
+                </button>
               </div>
               <div className="text-sm text-gray-300">
                 Crafted with <span className="text-red-500">❤️</span> by{' '}
