@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import axios from "axios";
 import { useState } from "react";
-
+import api from "@/lib/api"
 export function SignupForm({
   className,
   ...props
@@ -44,7 +43,7 @@ export function SignupForm({
 
       console.log("Sending signup request:", data);
       
-      const response = await axios.post('/api/auth/register', {
+      const response = await api.post('/auth/register', {
         name: data.name,
         email: data.email,
         password: data.password,

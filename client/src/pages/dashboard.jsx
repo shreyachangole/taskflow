@@ -27,7 +27,7 @@ import {
   Target,
   Zap
 } from 'lucide-react';
-import axios from 'axios';
+import api from "@/lib/api"
 
 const Dashboard = () => {
   // Get the profile information
@@ -35,16 +35,16 @@ const Dashboard = () => {
   const getUser = localStorage.getItem('token');
   useEffect(() => {
     if (getUser) {
-      axios.get('/api/auth/profile', { headers: { Authorization: `Bearer ${getUser}` } })
+      api.get('/auth/profile', { headers: { Authorization: `Bearer ${getUser}` } })
         .then(res => setUser(res.data.data.user))
         .catch(err => console.error('Error fetching profile:', err));
     }
   }, []);
   const userId = user?._id;
 
-  // Everything for the token and axiosconfig for every api
+  // Everything for the token and apiconfig for every api
   const token = localStorage.getItem('token');
-  const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
+  const apiConfig = { headers: { Authorization: `Bearer ${token}` } };
 
   // State management
   const [loadingTasks, setLoadingTasks] = useState(false);
@@ -58,8 +58,8 @@ const Dashboard = () => {
     if (!userId) return; // Wait until userId is available
 
     setLoadingTasks(true);
-    axios.get('/api/todos', {
-      ...axiosConfig,
+    api.get('/todos', {
+      ...apiConfig,
       params: { userId }
     })
       .then(res => {
@@ -85,7 +85,7 @@ const Dashboard = () => {
   // Fetch categories from backend
   useEffect(() => {
     if (!token) return;
-    axios.get('/api/categories', axiosConfig)
+    api.get('/categories', apiConfig)
       .then(res => {
         if (res.data && res.data.data && Array.isArray(res.data.data.categories)) {
           // Add count property for UI
@@ -216,7 +216,7 @@ const Dashboard = () => {
       category: taskForm.category || 'general',
     };
 
-    axios.post('/api/todos', newTask, axiosConfig)
+    api.post('/todos', newTask, apiConfig)
       .then(res => {
         setTasks(prev => [...prev, res.data.data.todo]);
         setTaskForm({ title: '', description: '', dueDate: '', priority: 'medium', category: '' });
@@ -232,7 +232,7 @@ const Dashboard = () => {
 
   const updateTask = () => {
     if (!editingTask) return;
-    axios.put(`/api/todos/${editingTask.id}`, taskForm, axiosConfig)
+    api.put(`/todos/${editingTask.id}`, taskForm, apiConfig)
       .then(res => {
         const updatedTask = res.data.data.todo;
         setTasks(prev => prev.map(task =>
@@ -250,7 +250,7 @@ const Dashboard = () => {
   };
 
   const toggleTaskComplete = (taskId) => {
-    axios.patch(`/api/todos/${taskId}/toggle`, {}, axiosConfig)
+    api.patch(`/todos/${taskId}/toggle`, {}, apiConfig)
       .then(res => {
         const updatedTask = res.data.data.todo;
         setTasks(prev => prev.map(task =>
@@ -265,7 +265,7 @@ const Dashboard = () => {
   };
 
   const deleteTask = (taskId) => {
-    axios.delete(`/api/todos/${taskId}`, axiosConfig)
+    api.delete(`/todos/${taskId}`, apiConfig)
       .then(() => {
         setTasks(prev => prev.filter(task => task.id !== taskId));
         showNotification('Task deleted successfully!');
@@ -278,7 +278,7 @@ const Dashboard = () => {
 
   // Archive task functionality (currently unused but available for future use)
   const archiveTask = (taskId) => {
-    axios.patch(`/api/todos/${taskId}`, { archived: true }, axiosConfig)
+    api.patch(`/todos/${taskId}`, { archived: true }, apiConfig)
       .then(res => {
         const updatedTask = res.data.data.todo;
         setTasks(prev => prev.map(task =>
@@ -314,10 +314,10 @@ const Dashboard = () => {
       return;
     }
 
-    axios.post('/api/categories', {
+    api.post('/categories', {
       name: categoryForm.name.trim(),
       color: tailwindToHex(categoryForm.color)
-    }, axiosConfig)
+    }, apiConfig)
       .then(res => {
         const cat = res.data.data.category;
         setCategories(prev => ([
@@ -344,10 +344,10 @@ const Dashboard = () => {
     }
 
     try {
-      const res = await axios.put(`/api/categories/${editingCategory.id}`, {
+      const res = await api.put(`/categories/${editingCategory.id}`, {
         name: categoryForm.name.trim(),
         color: tailwindToHex(categoryForm.color)
-      }, axiosConfig);
+      }, apiConfig);
 
       setCategories(prev => prev.map(cat =>
         cat.id === editingCategory.id ? { ...cat, ...res.data.data.category } : cat
@@ -370,7 +370,7 @@ const Dashboard = () => {
     }
 
     try {
-      await axios.delete(`/api/categories/${categoryId}`, axiosConfig);
+      await api.delete(`/categories/${categoryId}`, apiConfig);
       setCategories(prev => prev.filter(cat => cat.id !== categoryId));
       showNotification('Category deleted successfully!');
     } catch (err) {

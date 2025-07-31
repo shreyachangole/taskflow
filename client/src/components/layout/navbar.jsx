@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from "axios";
+import api from "@/lib/api";
 
 export default function Navbar() {
   // Simple navigation function
@@ -26,7 +26,7 @@ export default function Navbar() {
   
   useEffect(() => {
     if (token) {
-      axios.get('/api/auth/profile', axiosConfig)
+      api.get('/auth/profile', axiosConfig)
         .then(res => setUser(res.data.data.user))
         .catch(err => console.error('Error fetching profile:', err));
     }

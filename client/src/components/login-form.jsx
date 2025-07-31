@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "@/lib/api"
 export function LoginForm({
   className,
   ...props
@@ -37,7 +37,7 @@ export function LoginForm({
 
       console.log("Sending login request:", data);
 
-      const response = await axios.post('/api/auth/login', {
+      const response = await api.post('/auth/login', {
         email: data.email,
         password: data.password,
       });
