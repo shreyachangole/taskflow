@@ -1,4 +1,4 @@
-import { CheckSquare, Github, Linkedin, Mail, Star, Zap, ExternalLink, Home, Monitor, Heart, Bolt } from "lucide-react";
+import { CheckSquare, Github, Linkedin, Mail, Star, Zap, ExternalLink, Home, Monitor, Heart, Bolt, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -168,15 +168,19 @@ export default function Footer() {
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-300 justify-center md:justify-start">
                 <span>© 2025 TaskFlow. All rights reserved.</span>
                 <button 
-                  onClick={() => handleNavigation('/')}
-                  className="hover:text-white transition-colors cursor-pointer"
+                  onClick={() => handleNavigation('/privacy')}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-gray-300 hover:text-blue-400 hover:bg-gray-800/60 transition-colors cursor-pointer border border-gray-700/30 bg-gray-900/30 shadow-sm"
+                  style={{ fontWeight: 500 }}
                 >
+                  <Shield className="h-4 w-4 text-blue-400" />
                   Privacy
                 </button>
                 <button 
-                  onClick={() => handleNavigation('/')}
-                  className="hover:text-white transition-colors cursor-pointer"
+                  onClick={() => handleNavigation('/terms')}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-gray-300 hover:text-blue-400 hover:bg-gray-800/60 transition-colors cursor-pointer border border-gray-700/30 bg-gray-900/30 shadow-sm"
+                  style={{ fontWeight: 500 }}
                 >
+                  <ExternalLink className="h-4 w-4 text-blue-400" />
                   Terms
                 </button>
               </div>

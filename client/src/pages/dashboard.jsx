@@ -55,7 +55,7 @@ const Dashboard = () => {
       window.location.href = '/login';
       return;
     }
-    if (!userId) return; // Wait until userId is available
+    if (!userId) return; 
 
     setLoadingTasks(true);
     api.get('/todos', {

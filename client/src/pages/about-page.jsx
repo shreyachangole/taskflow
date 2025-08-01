@@ -1,5 +1,7 @@
+
 import { CheckSquare, Github, Linkedin, Mail, ExternalLink, Heart, Zap, Code, Database, Smartphone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Sagar from "@/assets/sagar.jpg";
 
 export default function AboutPage() {
   const navigate = (path) => {
@@ -63,8 +65,12 @@ export default function AboutPage() {
           <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-8 md:p-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="text-center md:text-left">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mx-auto md:mx-0 mb-6">
-                  <span className="text-4xl font-bold text-white">SW</span>
+                <div className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center mx-auto md:mx-0 mb-6 border-4 border-blue-500/40 shadow-lg">
+                  <img
+                    src={Sagar}
+                    alt="Sagar Waghmare"
+                    className="object-cover w-full h-full"
+                  />
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Sagar Suryakant Waghmare</h3>
                 <p className="text-blue-400 mb-4">Full Stack Developer</p>
