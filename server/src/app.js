@@ -7,7 +7,10 @@ import categories from "./routes/categories.js";
 const app = express();
 // Middleware
 app.use(cors({
-  origin:'*', // Allow all origins for development
+  origin:'*',
+  credentials:true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }))
 
 app.use(cookieParser());
