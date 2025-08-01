@@ -145,11 +145,11 @@ export function LoginForm({
       
       <div className="text-center text-xs text-gray-500 leading-relaxed">
         By signing in, you agree to our{" "}
-        <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
+        <a href="/terms" className="text-blue-400 hover:text-blue-300 transition-colors">
           Terms of Service
         </a>{" "}
         and{" "}
-        <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
+        <a href="/privacy" className="text-blue-400 hover:text-blue-300 transition-colors">
           Privacy Policy
         </a>
       </div>
