@@ -52,12 +52,12 @@
 
 ## 🎯 Demo
 
-🌐 **Live Application**: [https://taskflow-indol-six.vercel.app](https://taskflow-indol-six.vercel.app)
+🌐 **Live Application**: [https://taskflow-sagar.vercel.app/](https://taskflow-sagar.vercel.app/)
 
 ### Quick Demo Account
 ```
-Email: demo@taskflow.com
-Password: demo123
+Email: atharvawandhare@gmail.com
+Password: 12345678
 ```
 
 ## 🛠️ Tech Stack
