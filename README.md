@@ -26,7 +26,7 @@ Passionate full-stack developer with expertise in modern web technologies. Speci
 
 **⭐ If you found this project helpful, please give it a star! ⭐**
 
-**🚀 [Visit TaskFlow Live]([https://taskflow-shreya.vercel.app](https://aquamarine-nougat-5a32f8.netlify.app/)) | 📖 [Read the Docs](#) | 🐛 [Report Bug](https://github.com/ShreyaChangole/taskflow/issues)**
+**🚀 [Visit TaskFlow Live]((https://aquamarine-nougat-5a32f8.netlify.app/)) | 📖 [Read the Docs](#) | 🐛 [Report Bug](https://github.com/ShreyaChangole/taskflow/issues)**
 
 Made with ❤️ by [Shreya Changole](https://github.com/ShreyaChangole)
 
