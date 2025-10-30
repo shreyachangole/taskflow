@@ -8,7 +8,7 @@
     <meta name="title" content="TaskFlow - Free Modern Task Management App | React Todo List 2025">
     <meta name="description" content="TaskFlow is a beautiful, free task management application built with React, Node.js, and MongoDB. Organize tasks, boost productivity, and collaborate with teams. No premium plans, 100% free forever.">
     <meta name="keywords" content="task management, todo list, productivity app, react app, free task manager, project management, team collaboration, MERN stack, task organizer, daily planner">
-    <meta name="author" content="Sagar Suryakant Waghmare">
+    <meta name="author" content="Shreya Changole">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="revisit-after" content="7 days">
@@ -20,20 +20,20 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://taskflow-sagar.vercel.app/">
+    <meta property="og:url" content="https://taskflow-shreya.vercel.app/">
     <meta property="og:title" content="TaskFlow - Free Modern Task Management App | React Todo List 2025">
     <meta property="og:description" content="TaskFlow is a beautiful, free task management application built with React, Node.js, and MongoDB. Organize tasks, boost productivity, and collaborate with teams. No premium plans, 100% free forever.">
-    <meta property="og:image" content="https://taskflow-sagar.vercel.app/og-image.png">
+    <meta property="og:image" content="https://taskflow-shreya.vercel.app/og-image.png">
     <meta property="og:site_name" content="TaskFlow">
     <meta property="og:locale" content="en_US">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://taskflow-sagar.vercel.app/">
+    <meta property="twitter:url" content="https://taskflow-shreya.vercel.app/">
     <meta property="twitter:title" content="TaskFlow - Free Modern Task Management App | React Todo List 2025">
     <meta property="twitter:description" content="TaskFlow is a beautiful, free task management application built with React, Node.js, and MongoDB. Organize tasks, boost productivity, and collaborate with teams. No premium plans, 100% free forever.">
-    <meta property="twitter:image" content="https://taskflow-sagar.vercel.app/og-image.png">
-    <meta property="twitter:creator" content="@SagarWaghmare">
+    <meta property="twitter:image" content="https://taskflow-shreya.vercel.app/og-image.png">
+    <meta property="twitter:creator" content="@ShreyaChangole">
     
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -43,7 +43,7 @@
     <link rel="manifest" href="/site.webmanifest">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://taskflow-sagar.vercel.app/">
+    <link rel="canonical" href="https://taskflow-shreya.vercel.app/">
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +56,7 @@
       "@type": "WebApplication",
       "name": "TaskFlow",
       "description": "A beautiful, free task management application built with React, Node.js, and MongoDB. Organize tasks, boost productivity, and collaborate with teams.",
-      "url": "https://taskflow-sagar.vercel.app/",
+      "url": "https://taskflow-shreya.vercel.app/",
       "applicationCategory": "ProductivityApplication",
       "operatingSystem": "Web Browser",
       "offers": {
@@ -66,12 +66,12 @@
       },
       "author": {
         "@type": "Person",
-        "name": "Sagar Suryakant Waghmare",
-        "url": "https://github.com/SagarSuryakantWaghmare"
+        "name": "Shreya Changole",
+        "url": "https://github.com/shreya-changole"
       },
       "datePublished": "2024",
       "keywords": "task management, todo list, productivity app, react app, free task manager, project management, team collaboration, MERN stack",
-      "screenshot": "https://taskflow-sagar.vercel.app/og-image.png",
+      "screenshot": "https://taskflow-shreya.vercel.app/og-image.png",
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.8",
@@ -80,15 +80,15 @@
     }
     </script>
     
-    <!-- Alternative Languages (if you plan to add them) -->
-    <link rel="alternate" hreflang="en" href="https://taskflow-sagar.vercel.app/">
+    <!-- Alternative Languages -->
+    <link rel="alternate" hreflang="en" href="https://taskflow-shreya.vercel.app/">
     
     <!-- Performance and Security -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="origin-when-cross-origin">
   </head>
   <body>
-    <!-- Loading Screen with Animated Logo -->
+    <!-- Loading Screen -->
     <div id="loading-screen" style="
       position: fixed; 
       top: 0; 
@@ -103,7 +103,6 @@
       z-index: 9999;
       transition: opacity 0.5s ease-out;
     ">
-      <!-- TaskFlow Logo with Animation -->
       <div style="
         width: 80px; 
         height: 80px; 
@@ -129,7 +128,7 @@
         </svg>
       </div>
       
-      <!-- Loading Spinner -->
+      <!-- Spinner -->
       <div style="
         width: 40px; 
         height: 40px; 
@@ -188,44 +187,17 @@
       </div>
     </div>
     
-    <!-- Keyframe Animations -->
+    <!-- Animations -->
     <style>
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      @keyframes logoFloat {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-      }
-      
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.6; }
-      }
-      
-      @keyframes dotPulse {
-        0%, 100% { 
-          opacity: 0.4; 
-          transform: scale(1); 
-        }
-        50% { 
-          opacity: 1; 
-          transform: scale(1.2); 
-        }
-      }
-      
-      @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
-      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes logoFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+      @keyframes dotPulse { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+      @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     </style>
     
-    <!-- Main App Container -->
     <div id="root"></div>
     
-    <!-- No Script Fallback -->
     <noscript>
       <div style="text-align: center; padding: 50px; background: #000; color: #fff;">
         <h1>TaskFlow - Task Management App</h1>
@@ -234,36 +206,25 @@
       </div>
     </noscript>
     
-    <!-- Main Application Script -->
     <script type="module" src="/src/main.jsx"></script>
     
-    <!-- Hide Loading Screen with Fade Effect -->
     <script>
       window.addEventListener('load', function() {
         const loadingScreen = document.getElementById('loading-screen');
         if (loadingScreen) {
-          // Add fade out animation
           loadingScreen.style.animation = 'fadeOut 0.5s ease-out forwards';
-          // Remove element after animation completes
-          setTimeout(() => {
-            loadingScreen.remove();
-          }, 500);
+          setTimeout(() => { loadingScreen.remove(); }, 500);
         }
       });
       
-      // Also hide loading screen when React app mounts (fallback)
       document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
           const loadingScreen = document.getElementById('loading-screen');
           if (loadingScreen && loadingScreen.style.display !== 'none') {
             loadingScreen.style.animation = 'fadeOut 0.5s ease-out forwards';
-            setTimeout(() => {
-              if (loadingScreen.parentNode) {
-                loadingScreen.remove();
-              }
-            }, 500);
+            setTimeout(() => { if (loadingScreen.parentNode) loadingScreen.remove(); }, 500);
           }
-        }, 3000); // Hide after 3 seconds maximum
+        }, 3000);
       });
     </script>
   </body>

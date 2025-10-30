@@ -24,7 +24,7 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 30d
       - key: CLIENT_URL
-        value: https://taskflow-sagar.vercel.app
+        value: https://taskflow-shreya.vercel.app
       - key: BCRYPT_ROUNDS
         value: 12
       - key: SESSION_SECRET

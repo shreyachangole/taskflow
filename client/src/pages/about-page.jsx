@@ -1,7 +1,6 @@
-
 import { CheckSquare, Github, Linkedin, Mail, ExternalLink, Heart, Zap, Code, Database, Smartphone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Sagar from "@/assets/sagar.jpg";
+import Shreya from "@/assets/Shreya.jpeg";
 
 export default function AboutPage() {
   const navigate = (path) => {
@@ -67,12 +66,12 @@ export default function AboutPage() {
               <div className="text-center md:text-left">
                 <div className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center mx-auto md:mx-0 mb-6 border-4 border-blue-500/40 shadow-lg">
                   <img
-                    src={Sagar}
-                    alt="Sagar Waghmare"
+                    src={Shreya}
+                    alt="Shreya Changole"
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Sagar Suryakant Waghmare</h3>
+                <h3 className="text-2xl font-bold mb-2">Shreya Changole</h3>
                 <p className="text-blue-400 mb-4">Full Stack Developer</p>
                 <p className="text-gray-300 mb-6">
                   A passionate developer with expertise in modern web technologies. 
@@ -81,7 +80,7 @@ export default function AboutPage() {
                 
                 <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                   <a 
-                    href="https://github.com/SagarSuryakantWaghmare" 
+                    href="https://github.com/shreyachangole" 
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors"
@@ -91,7 +90,7 @@ export default function AboutPage() {
                     <ExternalLink className="h-3 w-3" />
                   </a>
                   <a 
-                    href="https://linkedin.com/in/sagarwaghmare44" 
+                    href="https://www.linkedin.com/in/shreya-changole-636000226/" 
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors"
@@ -101,7 +100,7 @@ export default function AboutPage() {
                     <ExternalLink className="h-3 w-3" />
                   </a>
                   <a 
-                    href="mailto:sagarwaghmare1384@gmail.com" 
+                    href="mailto:shreyachangole2004@gmail.com" 
                     className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors"
                   >
                     <Mail className="h-4 w-4" />
@@ -244,4 +243,4 @@ export default function AboutPage() {
       </section>
     </div>
   );
-} 
+}

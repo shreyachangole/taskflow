@@ -9,10 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "sagar",
-    "athrava"
+    "shreya"
+    
   ],
-  "author": "Sagar Suryakant Waghmare",
+  "author": "Shreya Changole",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
